@@ -1,0 +1,74 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="blocker:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>blocker</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="blocker-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="blocker:war exploded" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="application" />
+          <element id="module-output" name="service" />
+          <element id="module-output" name="repository" />
+          <element id="module-output" name="domain" />
+          <element id="jpa-descriptors" facet="application/jpa/JPA" />
+          <element id="jpa-descriptors" facet="service/jpa/JPA" />
+          <element id="jpa-descriptors" facet="repository/jpa/JPA" />
+          <element id="jpa-descriptors" facet="domain/jpa/JPA" />
+          <element id="module-output" name="utils" />
+          <element id="jpa-descriptors" facet="utils/jpa/JPA" />
+          <element id="module-output" name="dto" />
+          <element id="jpa-descriptors" facet="dto/jpa/JPA" />
+          <element id="module-output" name="mapper" />
+          <element id="jpa-descriptors" facet="mapper/jpa/JPA" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-devtools:2.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.18.12" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-web:5.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:5.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-core:5.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-security:2.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt:0.9.1" />
+          <element id="library" level="project" name="Maven: io.springfox:springfox-swagger-ui:2.9.2" />
+          <element id="library" level="project" name="Maven: io.springfox:springfox-spring-web:2.9.2" />
+          <element id="library" level="project" name="Maven: io.springfox:springfox-swagger2:2.9.2" />
+          <element id="library" level="project" name="Maven: io.swagger:swagger-annotations:1.5.20" />
+          <element id="library" level="project" name="Maven: io.swagger:swagger-models:1.5.20" />
+          <element id="library" level="project" name="Maven: io.springfox:springfox-spi:2.9.2" />
+          <element id="library" level="project" name="Maven: io.springfox:springfox-core:2.9.2" />
+          <element id="library" level="project" name="Maven: io.springfox:springfox-schema:2.9.2" />
+          <element id="library" level="project" name="Maven: io.springfox:springfox-swagger-common:2.9.2" />
+          <element id="library" level="project" name="Maven: com.google.guava:guava:20.0" />
+          <element id="library" level="project" name="Maven: org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.mapstruct:mapstruct:1.2.0.Final" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.21" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-mail:2.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: com.sun.mail:jakarta.mail:1.6.5" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context-support:5.2.6.RELEASE" />
+          <element id="library" level="project" name="Maven: com.squareup.retrofit2:converter-gson:2.9.0" />
+          <element id="library" level="project" name="Maven: com.squareup.retrofit2:retrofit:2.9.0" />
+          <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:3.14.8" />
+          <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.17.2" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.6" />
+          <element id="library" level="project" name="Maven: org.modelmapper:modelmapper:2.3.8" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="application/web/Web" />
+      <element id="javaee-facet-resources" facet="service/web/Web" />
+      <element id="javaee-facet-resources" facet="repository/web/Web" />
+      <element id="javaee-facet-resources" facet="domain/web/Web" />
+      <element id="javaee-facet-resources" facet="utils/web/Web" />
+      <element id="javaee-facet-resources" facet="dto/web/Web" />
+      <element id="javaee-facet-resources" facet="mapper/web/Web" />
+    </root>
+  </artifact>
+</component>
