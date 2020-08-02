@@ -98,6 +98,29 @@ public class UploadPrescriptionService implements IUploadPrescriptionService {
 
     @Override
     @Transactional
+    public PrescriptionResponse getAllPharmacyUploadPrescription(int PharmacyId) throws Exception {
+        PrescriptionResponse response=new PrescriptionResponse();
+        response.setResponse("failed");
+        try{
+            CriteriaBuilder builder=entityManager.getCriteriaBuilder();
+            CriteriaQuery<UploadPrescription> query=builder.createQuery(UploadPrescription.class);
+            Root<UploadPrescription> root=query.from(UploadPrescription.class);
+            query.select(root).where(builder.equal(root.get("pharmacy.id"),PharmacyId));
+            Query q=entityManager.createQuery(query);
+            List<UploadPrescription> prescriptions=new ArrayList<>();
+            prescriptions=q.getResultList();
+
+            response.setResponse("success");
+            response.setPresciptions(prescriptionMapper.convertToDto(prescriptions));
+            return response;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    @Override
+    @Transactional
     public PrescriptionResponse getUploadPrescription(int UploadPrescriptionId) throws Exception {
         PrescriptionResponse response=new PrescriptionResponse();
         response.setResponse("failed");

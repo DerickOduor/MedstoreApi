@@ -28,6 +28,8 @@
           <element id="jpa-descriptors" facet="dto/jpa/JPA" />
           <element id="module-output" name="mapper" />
           <element id="jpa-descriptors" facet="mapper/jpa/JPA" />
+          <element id="module-output" name="external" />
+          <element id="jpa-descriptors" facet="external/jpa/JPA" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-devtools:2.3.0.RELEASE" />
@@ -69,6 +71,7 @@
       <element id="javaee-facet-resources" facet="utils/web/Web" />
       <element id="javaee-facet-resources" facet="dto/web/Web" />
       <element id="javaee-facet-resources" facet="mapper/web/Web" />
+      <element id="javaee-facet-resources" facet="external/web/Web" />
     </root>
   </artifact>
 </component>

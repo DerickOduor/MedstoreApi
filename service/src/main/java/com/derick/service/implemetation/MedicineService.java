@@ -72,6 +72,28 @@ public class MedicineService implements IMedicineService {
     }
 
     @Override
+    public ViewMedicineResponse getPharmacyMedicine(int PharmacyId) throws NotFoundException {
+        ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
+        viewMedicineResponse.setResponse("failed");
+        try{
+            CriteriaBuilder builder=entityManager.getCriteriaBuilder();
+            CriteriaQuery<Medicine> query=builder.createQuery(Medicine.class);
+            Root<Medicine> root=query.from(Medicine.class);
+            query.select(root).where(builder.equal(root.get("pharmacy.id"),PharmacyId));
+            Query q=entityManager.createQuery(query);
+
+            List<Medicine> medicine= new ArrayList<>();
+            medicine=q.getResultList();
+            viewMedicineResponse.setMedicineList(viewMedicineMapper.convertToDto(medicine));
+            viewMedicineResponse.setResponse("success");
+            return viewMedicineResponse;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return viewMedicineResponse;
+    }
+
+    @Override
     @Transactional
     public ViewMedicineResponse getMedicine(String key) throws NotFoundException {
         ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();

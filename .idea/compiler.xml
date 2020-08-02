@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mapper" />
+        <module name="external" />
         <module name="service" />
         <module name="utils" />
         <module name="repository" />
@@ -20,6 +21,7 @@
       <module name="blocker" target="1.8" />
       <module name="domain" target="1.8" />
       <module name="dto" target="1.8" />
+      <module name="external" target="1.8" />
       <module name="mapper" target="1.8" />
       <module name="repository" target="1.8" />
       <module name="service" target="1.8" />
@@ -32,6 +34,7 @@
       <module name="blocker" options="-parameters" />
       <module name="domain" options="-parameters" />
       <module name="dto" options="-parameters" />
+      <module name="external" options="-parameters" />
       <module name="mapper" options="-parameters" />
       <module name="repository" options="-parameters" />
       <module name="service" options="-parameters" />

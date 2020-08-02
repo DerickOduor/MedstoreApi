@@ -1,4 +1,4 @@
-package com.derick.service;
+package com.derick.service.implemetation;
 
 import com.derick.domain.Medicine;
 import com.derick.domain.PrescriptionQuotation;
@@ -11,6 +11,7 @@ import com.derick.mapper.quotation.QuotationMapper;
 import com.derick.repository.IMedicineRepository;
 import com.derick.repository.IPrescriptionQuotationRepository;
 import com.derick.repository.IUploadPrescriptionRepository;
+import com.derick.service.IPrescriptionQuotationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ import javax.persistence.criteria.Root;
 import java.util.*;
 
 @Service
-public class PrescriptionQuotationService implements IPrescriptionQuotationService{
+public class PrescriptionQuotationService implements IPrescriptionQuotationService {
 
     @PersistenceContext
     EntityManager entityManager;
@@ -132,6 +133,30 @@ public class PrescriptionQuotationService implements IPrescriptionQuotationServi
             e.printStackTrace();
         }
 
+        return response;
+    }
+
+    @Override
+    public QuotationResponse viewPharmacyQuotations(int PharmacyId) throws Exception {
+        QuotationResponse response=new QuotationResponse();
+        response.setResponse("failed");
+        try{
+            List<PrescriptionQuotation> quotations=new ArrayList<>();
+            CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<PrescriptionQuotation> query = builder.createQuery(PrescriptionQuotation.class);
+            Root<PrescriptionQuotation> root = query.from(PrescriptionQuotation.class);
+            query.select(root).where(builder.equal(root.get("prescription.pharmacy.id"), PharmacyId));
+            Query q = entityManager.createQuery(query);
+
+            quotations=q.getResultList();
+
+            response.setQuotations(quotationMapper.convertToDto(quotations));
+            response.setResponse("success");
+
+            return response;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return response;
     }
 

@@ -2,9 +2,9 @@ package com.derick.application.controllers;
 
 import com.derick.domain.Country;
 import com.derick.domain.User;
-import com.derick.service.ICountryService;
-import com.derick.service.IRoleService;
-import com.derick.service.IUserService;
+import com.derick.dto.payment.mpesa.MpesaParameterDto;
+import com.derick.dto.payment.mpesa.MpesaUrlDto;
+import com.derick.service.*;
 import com.derick.service.implemetation.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +34,12 @@ public class HomeController {
     IRoleService roleService;
 
     @Autowired
+    IMpesaUrlService mpesaUrlService;
+
+    @Autowired
+    IMpesaParameterService mpesaParameterService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @GetMapping( value = {"/",""})
@@ -41,6 +47,16 @@ public class HomeController {
     public String launch(){
         try {
             roleService.initRoles();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            mpesaUrlService.addUrl(new MpesaUrlDto());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            mpesaParameterService.addParameter(new MpesaParameterDto());
         }catch (Exception e){
             e.printStackTrace();
         }

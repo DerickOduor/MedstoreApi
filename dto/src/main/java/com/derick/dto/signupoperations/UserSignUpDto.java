@@ -1,26 +1,43 @@
 package com.derick.dto.signupoperations;
 
+import com.derick.dto.pharmacy.PharmacyDto;
+import com.derick.dto.userrole.RoleDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Column;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 public class UserSignUpDto {
 
     private String Firstname;
-
     private String Lastname;
-
     private String Email;
-
     private String Phone;
-
     private String Otp;
-
     private String Password;
+    private Set<RoleDto> roles = new HashSet<>();
+    private PharmacyDto pharmacy;
+
+    public PharmacyDto getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(PharmacyDto pharmacy) {
+        this.pharmacy = pharmacy;
+    }
+
+    public Set<RoleDto> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleDto> roles) {
+        this.roles = roles;
+    }
 
     public String getPassword() {
         return Password;

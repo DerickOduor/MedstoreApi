@@ -89,6 +89,7 @@ public class RoleService implements IRoleService {
                 List<Role> roles=new ArrayList<>();
                 roles.add(new Role("ROLE_ADMIN"));
                 roles.add(new Role("ROLE_USER"));
+                roles.add(new Role("ROLE_PHARMACY"));
 
                 roleRepository.saveAll(roles);
             }else{

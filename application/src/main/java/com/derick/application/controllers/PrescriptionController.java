@@ -76,6 +76,21 @@ public class PrescriptionController {
         return ResponseEntity.ok(prescriptionResponse);
     }
 
+    @GetMapping("/api/prescription/pharmacy/{id}")
+    public ResponseEntity<PrescriptionResponse> getAllPharmacyUploadPrescription(@PathVariable int id, HttpServletRequest request, HttpServletResponse response){
+        PrescriptionResponse prescriptionResponse=new PrescriptionResponse();
+        prescriptionResponse.setResponse("failed");
+        try {
+            prescriptionResponse=uploadPrescriptionService.getAllPharmacyUploadPrescription(id);
+
+            return ResponseEntity.ok(prescriptionResponse);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok(prescriptionResponse);
+    }
+
     @DeleteMapping("/api/prescription/delete/{id}")
     public ResponseEntity<PrescriptionResponse> deleteCustomerUploadPrescriptions(@PathVariable int id, HttpServletRequest request, HttpServletResponse response){
         PrescriptionResponse prescriptionResponse=new PrescriptionResponse();

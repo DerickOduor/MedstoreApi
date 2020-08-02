@@ -1,5 +1,6 @@
 package com.derick.dto.prescription;
 
+import com.derick.dto.pharmacy.PharmacyDto;
 import com.derick.dto.user.UserDto;
 
 import javax.persistence.*;
@@ -16,6 +17,24 @@ public class PresciptionDto {
     private Date DateUploaded;
 
     private UserDto userDto;
+
+    private PharmacyDto pharmacy;
+
+    public UserDto getUserDto() {
+        return userDto;
+    }
+
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
+    }
+
+    public PharmacyDto getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(PharmacyDto pharmacy) {
+        this.pharmacy = pharmacy;
+    }
 
     public int getId() {
         return id;

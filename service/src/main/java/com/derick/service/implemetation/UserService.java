@@ -1,5 +1,6 @@
 package com.derick.service.implemetation;
 
+import com.derick.domain.Pharmacy;
 import com.derick.domain.Role;
 import com.derick.domain.User;
 import com.derick.dto.signupoperations.UserConfirmOtpDto;
@@ -129,7 +130,6 @@ public class UserService implements IUserService {
             Query q=entityManager.createQuery(query);
             List<User> userList=new ArrayList<>();
             userList=q.getResultList();
-
             System.out.println("wrY: "+gson.toJson(userList)+" User: "+gson.toJson(user));
             if(userList.size()>0){
                 System.out.println("Y: "+gson.toJson(userList));
@@ -140,7 +140,6 @@ public class UserService implements IUserService {
             q=entityManager.createQuery(query);
             userList=q.getResultList();
             System.out.println("Ydfgr: "+gson.toJson(userList));
-
             if(userList.size()>0){
                 System.out.println("Ztyj: "+userList.size());
                 userSignUpResponse.setResponse("User already exists.");
@@ -151,22 +150,47 @@ public class UserService implements IUserService {
                 System.out.println("ytuX: "+userList.size());
                 user.setDateRegistered(new Date());
                 user.setRegistrationConfirmed(false);
-
                 String st="";
                 st=randomGenerator.generateRandomString(6);
                 user.setOtp(st);
-
                 user.setOtpDate(new Date());
                 try{
-                    Set<Role> roles = new HashSet<>();
-                    roles.add(roleService.getRole("ROLE_USER"));
-                    //user.setRoles(Arrays.asList(roles));
-                    user.setRoles(roles);
+                    if(userSignUpDto.getRoles()==null){
+                        Set<Role> roles = new HashSet<>();
+                        roles.add(roleService.getRole("ROLE_USER"));
+                        //user.setRoles(Arrays.asList(roles));
+                        user.setRoles(roles);
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                 }
                 entityManager.persist(user);
-
+                if(user.getRoles()!=null){
+                    if(user.getRoles().size()!=0){
+                        Role role=null;
+                        try{
+                            //role=user.getRoles().iterator().next();
+                            for(Role r:user.getRoles()){
+                                if(r.getName().equalsIgnoreCase("ROLE_PHARMACY")){
+                                    role=r;
+                                }
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        if(role!=null){
+                            Pharmacy pharmacy=null;
+                            try{
+                                pharmacy=entityManager.find(Pharmacy.class,userSignUpDto.getPharmacy().getId());
+                                Set<User> users=new HashSet<>();
+                                users.add(user);
+                                pharmacy.setUsers(users);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
                 userSignUpResponse.setResponse("success");
                 userSignUpResponse.setUserSignUpDto(userSignUpDto);
 
@@ -183,11 +207,6 @@ public class UserService implements IUserService {
                 }
                 return userSignUpResponse;
             }
-
-
-
-
-
         }catch (Exception e){
             e.printStackTrace();
         }

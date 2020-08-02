@@ -22,7 +22,6 @@ public class MedicineController {
     IMedicineService medicineService;
 
     @GetMapping("/api/medicine")
-    //@PreAuthorize("permitAll()")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ViewMedicineResponse> getMedicine(HttpServletRequest request, HttpServletResponse response){
         ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
@@ -39,13 +38,27 @@ public class MedicineController {
     }
 
     @GetMapping("/api/medicine/{id}")
-    //@PreAuthorize("permitAll()")
     public ResponseEntity<ViewMedicineResponse> getMedicine(@PathVariable int id, HttpServletRequest request, HttpServletResponse response){
         ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
         viewMedicineResponse.setResponse("failed");
 
         try{
-            viewMedicineResponse=medicineService.getMedicine();
+            viewMedicineResponse=medicineService.getMedicine(id);
+            return ResponseEntity.ok(viewMedicineResponse);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok(viewMedicineResponse);
+    }
+
+    @GetMapping("/api/medicine/pharmacy/{id}")
+    public ResponseEntity<ViewMedicineResponse> getPharmacyMedicine(@PathVariable int id, HttpServletRequest request, HttpServletResponse response){
+        ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
+        viewMedicineResponse.setResponse("failed");
+
+        try{
+            viewMedicineResponse=medicineService.getPharmacyMedicine(id);
             return ResponseEntity.ok(viewMedicineResponse);
         }catch (Exception e){
             e.printStackTrace();
@@ -55,7 +68,6 @@ public class MedicineController {
     }
 
     @PostMapping("/api/medicine/search")
-    //@PreAuthorize("permitAll()")
     public ResponseEntity<ViewMedicineResponse> searchMedicine(@RequestBody String key, HttpServletRequest request, HttpServletResponse response){
         ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
         viewMedicineResponse.setResponse("failed");
@@ -71,7 +83,6 @@ public class MedicineController {
     }
 
     @PostMapping("/api/medicine/add")
-    //@PreAuthorize("permitAll()")
     public ResponseEntity<ViewMedicineResponse> addMedicine(@RequestBody AddMedicineDto addMedicineDto, HttpServletRequest request, HttpServletResponse response){
         ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
         viewMedicineResponse.setResponse("failed");
@@ -87,7 +98,6 @@ public class MedicineController {
     }
 
     @PutMapping("/api/medicine/update")
-    //@PreAuthorize("permitAll()")
     public ResponseEntity<AddMedicineResponse> updateMedicine(@RequestBody ViewMedicineDto viewMedicineDto, HttpServletRequest request, HttpServletResponse response){
         AddMedicineResponse viewMedicineResponse=new AddMedicineResponse();
         viewMedicineResponse.setResponse("failed");

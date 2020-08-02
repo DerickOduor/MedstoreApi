@@ -11,6 +11,7 @@ public interface IUploadPrescriptionService {
 
     PrescriptionResponse saveUploadPrescription(NewPrescriptionDto uploadPrescription) throws Exception;
     PrescriptionResponse getAllUploadPrescription(int CustomerId) throws Exception;
+    PrescriptionResponse getAllPharmacyUploadPrescription(int PharmacyId) throws Exception;
     PrescriptionResponse getUploadPrescription(int UploadPrescriptionId) throws Exception;
     PrescriptionResponse deleteUploadPrescription(int UploadPrescriptionId) throws Exception;
 

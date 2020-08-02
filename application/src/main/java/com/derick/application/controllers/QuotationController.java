@@ -82,6 +82,21 @@ public class QuotationController {
         return ResponseEntity.ok(quotationResponse);
     }
 
+    @GetMapping("/api/quotation/pharmacy/{id}")
+    public ResponseEntity<QuotationResponse> viewPharmacyQuotations(@PathVariable int id, HttpServletRequest request, HttpServletResponse response){
+        QuotationResponse quotationResponse=new QuotationResponse();
+        quotationResponse.setResponse("failed");
+        try {
+            quotationResponse=prescriptionQuotationService.viewPharmacyQuotations(id);
+
+            return ResponseEntity.ok(quotationResponse);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok(quotationResponse);
+    }
+
     @DeleteMapping("/api/quotation/customer/{id}")
     public ResponseEntity<QuotationResponse> deleteCustomerQuotations(@PathVariable int id, HttpServletRequest request, HttpServletResponse response){
         QuotationResponse quotationResponse=new QuotationResponse();

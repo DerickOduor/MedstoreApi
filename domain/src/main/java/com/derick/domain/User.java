@@ -76,7 +76,31 @@ public class User implements Serializable
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST)
+    private Set<StkPushRequest> stkPushRequests;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST)
     private Set<PrescriptionQuotation> quotations;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST)
+    private Set<CustomerOrder> customerOrders;
+
+    public Set<StkPushRequest> getStkPushRequests() {
+        return stkPushRequests;
+    }
+
+    public void setStkPushRequests(Set<StkPushRequest> stkPushRequests) {
+        this.stkPushRequests = stkPushRequests;
+    }
+
+    public Set<CustomerOrder> getCustomerOrders() {
+        return customerOrders;
+    }
+
+    public void setCustomerOrders(Set<CustomerOrder> customerOrders) {
+        this.customerOrders = customerOrders;
+    }
 
     public User() {
         //uploadPrescriptions = new HashSet<>();

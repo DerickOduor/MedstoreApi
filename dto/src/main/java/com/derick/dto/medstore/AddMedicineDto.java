@@ -1,19 +1,27 @@
 package com.derick.dto.medstore;
 
+import com.derick.domain.Pharmacy;
+import com.derick.dto.pharmacy.PharmacyDto;
+
 import java.util.Date;
 
 public class AddMedicineDto {
+
     private String Name;
-
     private Date DateAdded;
-
     private int Quantity;
-
     private double Price;
-
     private boolean Available;
-
     private byte[] MedicineImage;
+    private PharmacyDto pharmacy;
+
+    public PharmacyDto getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(PharmacyDto pharmacy) {
+        this.pharmacy = pharmacy;
+    }
 
     public String getName() {
         return Name;

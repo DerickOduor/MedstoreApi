@@ -1,27 +1,32 @@
 package com.derick.dto.user;
 
+import com.derick.dto.userrole.RoleDto;
+
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserDto {
+
     private int id;
-
     private String Firstname;
-
     private String Lastname;
-
     private String Email;
-
     private String Phone;
-
     private Date DateRegistered;
-
     private boolean RegistrationConfirmed;
-
     private boolean Locked;
-
     private boolean OtpConfirmed;
-
     private Date OtpDate;
+    private Set<RoleDto> roles = new HashSet<>();
+
+    public Set<RoleDto> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleDto> roles) {
+        this.roles = roles;
+    }
 
     public String getPhone() {
         return Phone;

@@ -1,5 +1,6 @@
 package com.derick.dto.prescription;
 
+import com.derick.dto.pharmacy.PharmacyDto;
 import com.derick.dto.user.UserDto;
 
 import java.util.Date;
@@ -12,6 +13,16 @@ public class NewPrescriptionDto {
     private Date DateUploaded;
 
     private int userId;
+
+    private PharmacyDto pharmacy;
+
+    public PharmacyDto getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(PharmacyDto pharmacy) {
+        this.pharmacy = pharmacy;
+    }
 
     public byte[] getFile() {
         return file;

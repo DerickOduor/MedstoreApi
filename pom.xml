@@ -10,6 +10,7 @@
         <module>utils</module>
         <module>dto</module>
         <module>mapper</module>
+        <module>external</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

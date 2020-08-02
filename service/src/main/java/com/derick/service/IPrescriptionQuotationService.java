@@ -9,6 +9,7 @@ public interface IPrescriptionQuotationService {
     public QuotationResponse updateQuotation(QuotationDto quotationDto) throws Exception;
     public QuotationResponse viewQuotation(int QuotationId) throws Exception;
     public QuotationResponse viewCustomerQuotations(int CustomerId) throws Exception;
+    public QuotationResponse viewPharmacyQuotations(int PharmacyId) throws Exception;
     public QuotationResponse deleteQuotation(int QuotationId) throws Exception;
     public QuotationResponse deleteCustomerQuotations(int CustomerId) throws Exception;
 }

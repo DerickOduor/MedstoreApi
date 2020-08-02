@@ -52,18 +52,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/authenticate").permitAll().
                 antMatchers("/").permitAll().
+                antMatchers("/api/mpesa/**").permitAll().
+                antMatchers("/api/chezanani/**").permitAll().
                 antMatchers("/api/signin/**").permitAll().
                 antMatchers("/api/signup/**").permitAll().
                 antMatchers("/api/confirmOtp/**").permitAll().
                 antMatchers("/api/resendOtp/**").permitAll().
                 antMatchers("/api/resetpassword/**").permitAll().
-//                antMatchers("/api/medicine/**").hasAnyRole("ADMIN","CUSTOMER").
-        antMatchers("/api/medicine/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')").
-        antMatchers("/api/prescription/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')").
-                antMatchers("/api/quotation/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')").
-        antMatchers("/api/medicine/update/**").access("hasRole('ROLE_ADMIN')").
-        antMatchers("/api/medicine/add/**").access("hasRole('ROLE_ADMIN')").
-        antMatchers("/api/quotation/send/**").access("hasRole('ROLE_ADMIN')").
+                antMatchers("/api/pharmacy/**").permitAll().
+                antMatchers("/api/medicine/**").permitAll().
+                antMatchers("/api/paymentoption/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY') or hasRole('ROLE_USER')").
+                antMatchers("/api/deliverytype/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY') or hasRole('ROLE_USER')").
+        antMatchers("/api/medicine/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/prescription/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/prescription/pharmacy/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+                antMatchers("/api/quotation/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+                antMatchers("/api/order/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/medicine/update/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/medicine/add/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/quotation/send/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/paymentoption/option/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/deliverytype/type/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/order/approve/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/pharmacy/delete/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
                 antMatchers("/home*").permitAll().
                 antMatchers("/v2/api-docs").permitAll().
                 antMatchers("/swagger-ui.html").permitAll().

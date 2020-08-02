@@ -5,6 +5,7 @@ import com.sun.istack.NotNull;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @Entity(name = "Medicine")
 @Table(name = "Medicine")
@@ -61,6 +62,30 @@ public class Medicine implements Serializable {
     @Column(nullable = false)
     @Lob
     private byte[] MedicineImage;
+
+    @OneToMany(mappedBy = "medicine", fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST)
+    private Set<OrderItem> orderItems;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "pharmacy_id", referencedColumnName = "id", nullable = false)
+    private Pharmacy pharmacy;
+
+    public Pharmacy getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
+    }
+
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     public String getDescription() {
         return Description;
