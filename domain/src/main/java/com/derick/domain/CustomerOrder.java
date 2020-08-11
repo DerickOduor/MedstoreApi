@@ -39,15 +39,32 @@ public class CustomerOrder implements Serializable {
     @JoinColumn(name = "delivery_type_id", referencedColumnName = "id", nullable = false)
     private OrderDeliveryType DeliveryType;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,
-            cascade = CascadeType.REMOVE)
-    private Set<OrderItem> orderItems;
 
-    @OneToOne(mappedBy = "order")
+    @OneToMany(mappedBy = "customerOrder",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    private Set<OrderSlip> orderSlips;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "delivery_information_id", referencedColumnName = "id")
     private OrderDeliveryInformation deliveryInformation;
 
     @OneToOne(mappedBy = "order")
     private StkPushRequest stkPushRequest;
+
+    public Set<OrderSlip> getOrderSlips() {
+        return orderSlips;
+    }
+
+    public void setOrderSlips(Set<OrderSlip> orderSlips) {
+        this.orderSlips = orderSlips;
+    }
+
+    public StkPushRequest getStkPushRequest() {
+        return stkPushRequest;
+    }
+
+    public void setStkPushRequest(StkPushRequest stkPushRequest) {
+        this.stkPushRequest = stkPushRequest;
+    }
 
     public String getOrderNumber() {
         return OrderNumber;
@@ -73,13 +90,15 @@ public class CustomerOrder implements Serializable {
         this.deliveryInformation = deliveryInformation;
     }
 
-    public Set<OrderItem> getOrderItems() {
+
+
+    /*public Set<OrderItem> getOrderItems() {
         return orderItems;
     }
 
     public void setOrderItems(Set<OrderItem> orderItems) {
         this.orderItems = orderItems;
-    }
+    }*/
 
     @Transient
     public double getTotalCost(){

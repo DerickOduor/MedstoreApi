@@ -1,5 +1,6 @@
 package com.derick.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -10,6 +11,9 @@ public class RandomGenerator {
     private static final String CHAR_LOWER = "0123456789";
     private static final String CHAR_UPPER = "9876543210";
     private static final String NUMBER = "0123456789";
+
+    @Autowired
+    LogFile logFile;
 
     private static final AtomicLong sequence = new AtomicLong(System.currentTimeMillis() / 1000);
 
@@ -22,6 +26,7 @@ public class RandomGenerator {
             return "PHA#"+Long.toString(orderNumber);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         return generateRandomString(8);
@@ -42,6 +47,7 @@ public class RandomGenerator {
             }
             return sb.toString();
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 

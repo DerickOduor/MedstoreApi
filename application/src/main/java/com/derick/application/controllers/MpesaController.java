@@ -10,6 +10,7 @@ import com.derick.external.payment.mpesa.response.Validation;
 import com.derick.dto.payment.mpesa.stkpush.MpesaCallBackResponse;
 import com.derick.external.payment.mpesa.security.SecurityUtil;
 import com.derick.service.IStkPushService;
+import com.derick.utils.LogFile;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +35,9 @@ public class MpesaController {
     @Autowired
     IStkPushService stkPushService;
 
+    @Autowired
+    LogFile logFile;
+
     @GetMapping( value = "/api/mpesa")
     @PreAuthorize("permitAll()")
     public String launch(){
@@ -43,6 +47,7 @@ public class MpesaController {
             return stkPush.processPayment();
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return "WELCOME";
     }
@@ -52,9 +57,11 @@ public class MpesaController {
     public String stkresponse(@RequestBody MpesaCallBackResponse response){
         try {
             System.out.println("MpesaCallBackResponse: "+gson.toJson(response));
+            logFile.events("M-Pesa STK CallBack: \n"+gson.toJson(response));
             stkPushService.addStkPushResponse(response);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return "WELCOME";
     }
@@ -66,9 +73,10 @@ public class MpesaController {
         response.setResultCode(0);
         response.setResultDesc("Success");
         try {
-            System.out.println("VAY: "+gson.toJson(validation));
+            logFile.events("M-Pesa ValidateResponse 1: \n"+gson.toJson(validation));
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -80,9 +88,10 @@ public class MpesaController {
         response.setResultDesc("The service was accepted successfully");
         response.setThirdPartyTransID("1234567890");
         try {
-            System.out.println("ETYRG: "+gson.toJson(validation));
+            logFile.events("M-Pesa Validation: \n"+gson.toJson(validation));
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -92,10 +101,11 @@ public class MpesaController {
         QueueTimeoutResponse response=new QueueTimeoutResponse();
         response.setResponseCode("00000000");
         response.setResponseDesc("success");
+        logFile.events("M-Pesa QueueTimeout: \n"+gson.toJson(response));
         try {
-            System.out.println("RTYR: ");
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }

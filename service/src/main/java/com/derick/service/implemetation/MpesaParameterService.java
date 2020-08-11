@@ -5,6 +5,7 @@ import com.derick.dto.payment.mpesa.MpesaParameterDto;
 import com.derick.dto.payment.mpesa.MpesaResponse;
 import com.derick.mapper.payment.mpesa.MpesaParameterMapper;
 import com.derick.service.IMpesaParameterService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,9 @@ public class MpesaParameterService implements IMpesaParameterService {
 
     @PersistenceContext
     EntityManager entityManager;
+
+    @Autowired
+    LogFile logFile;
 
     @Autowired
     MpesaParameterMapper mpesaParameterMapper;
@@ -47,6 +51,7 @@ public class MpesaParameterService implements IMpesaParameterService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -64,6 +69,7 @@ public class MpesaParameterService implements IMpesaParameterService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -109,6 +115,7 @@ public class MpesaParameterService implements IMpesaParameterService {
                 entityManager.persist(parameter6);
             }
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         try{
@@ -120,6 +127,7 @@ public class MpesaParameterService implements IMpesaParameterService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;

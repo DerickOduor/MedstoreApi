@@ -3,7 +3,7 @@ package com.derick.dto.order;
 
 public class DeliveryInformationDto {
     private int id;
-    private CustomerOrderDto order;
+    private DeliveryInformationOrderDto order;
     private String Phone;
     private String FullName;
     private String Address;
@@ -16,11 +16,11 @@ public class DeliveryInformationDto {
         this.id = id;
     }
 
-    public CustomerOrderDto getOrder() {
+    public DeliveryInformationOrderDto getOrder() {
         return order;
     }
 
-    public void setOrder(CustomerOrderDto order) {
+    public void setOrder(DeliveryInformationOrderDto order) {
         this.order = order;
     }
 

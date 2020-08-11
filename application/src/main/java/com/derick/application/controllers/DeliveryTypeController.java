@@ -4,6 +4,7 @@ import com.derick.application.controllers.util.UserUtil;
 import com.derick.dto.delivery.OrderDeliveryResponse;
 import com.derick.dto.delivery.OrderDeliveryTypeDto;
 import com.derick.service.IOrderDeliveryTypeService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +23,9 @@ public class DeliveryTypeController {
     @Autowired
     IOrderDeliveryTypeService deliveryTypeService;
 
+    @Autowired
+    LogFile logFile;
+
     @PostMapping("/api/deliverytype/type")
     public ResponseEntity<OrderDeliveryResponse> addDeliveryType(@RequestBody OrderDeliveryTypeDto deliveryTypeDto, HttpServletRequest request, HttpServletResponse response)
     {
@@ -32,6 +36,7 @@ public class DeliveryTypeController {
             return ResponseEntity.ok(deliveryResponse);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(deliveryResponse);
     }
@@ -46,6 +51,7 @@ public class DeliveryTypeController {
             return ResponseEntity.ok(deliveryResponse);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         return ResponseEntity.ok(deliveryResponse);
@@ -61,6 +67,7 @@ public class DeliveryTypeController {
             return ResponseEntity.ok(deliveryResponse);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         return ResponseEntity.ok(deliveryResponse);
@@ -76,6 +83,7 @@ public class DeliveryTypeController {
             return ResponseEntity.ok(deliveryResponse);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(deliveryResponse);
     }

@@ -4,6 +4,7 @@ import com.derick.application.controllers.util.UserUtil;
 import com.derick.dto.payment.option.PaymentOptionDto;
 import com.derick.dto.payment.option.PaymentOptionResponse;
 import com.derick.service.IPaymentOptionService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,9 @@ public class PaymentOptionController {
     @Autowired
     IPaymentOptionService paymentOptionService;
 
+    @Autowired
+    LogFile logFile;
+
     @PostMapping("/api/paymentoption/option/")
     public ResponseEntity<PaymentOptionResponse> addPaymentoption(@RequestBody PaymentOptionDto paymentOptionDto, HttpServletRequest request, HttpServletResponse response)
     {
@@ -29,6 +33,7 @@ public class PaymentOptionController {
         try{
             paymentOptionResponse=paymentOptionService.addPaymentoption(paymentOptionDto);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return ResponseEntity.ok(paymentOptionResponse);
@@ -42,6 +47,7 @@ public class PaymentOptionController {
         try{
             paymentOptionResponse=paymentOptionService.updatePaymentoption(paymentOptionDto);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return ResponseEntity.ok(paymentOptionResponse);
@@ -56,6 +62,7 @@ public class PaymentOptionController {
             paymentOptionResponse=paymentOptionService.getPaymentoption(id);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(paymentOptionResponse);
     }
@@ -69,6 +76,7 @@ public class PaymentOptionController {
             paymentOptionResponse=paymentOptionService.deletePaymentoption(id);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(paymentOptionResponse);
     }
@@ -82,6 +90,7 @@ public class PaymentOptionController {
             paymentOptionResponse=paymentOptionService.getPaymentoptions();
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(paymentOptionResponse);
     }
@@ -95,6 +104,7 @@ public class PaymentOptionController {
             paymentOptionResponse=paymentOptionService.getPaymentoptions(status);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(paymentOptionResponse);
     }

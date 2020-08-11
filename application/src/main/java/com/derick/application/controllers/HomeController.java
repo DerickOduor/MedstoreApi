@@ -6,6 +6,7 @@ import com.derick.dto.payment.mpesa.MpesaParameterDto;
 import com.derick.dto.payment.mpesa.MpesaUrlDto;
 import com.derick.service.*;
 import com.derick.service.implemetation.CountryService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +43,9 @@ public class HomeController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    LogFile logFile;
+
     @GetMapping( value = {"/",""})
     @PreAuthorize("permitAll()")
     public String launch(){
@@ -54,11 +58,13 @@ public class HomeController {
             mpesaUrlService.addUrl(new MpesaUrlDto());
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         try{
             mpesaParameterService.addParameter(new MpesaParameterDto());
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return "WELCOME";
     }
@@ -80,6 +86,7 @@ public class HomeController {
 
             //userService.saveUser(user);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return ResponseEntity.ok("KARIBU BLOCK");
@@ -91,6 +98,7 @@ public class HomeController {
             return countryService.getAll();
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
             return null;
         }
     }
@@ -113,6 +121,7 @@ public class HomeController {
             return userService.getUserByEmail("oduorderick@gmail.com");
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
             return null;
         }
     }

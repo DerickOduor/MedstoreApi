@@ -7,6 +7,7 @@ import com.derick.dto.prescription.PrescriptionResponse;
 import com.derick.dto.user.UserDto;
 import com.derick.mapper.user.UserMapper;
 import com.derick.service.IUploadPrescriptionService;
+import com.derick.utils.LogFile;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,9 @@ public class PrescriptionController {
     @Autowired
     UserUtil userUtil;
 
+    @Autowired
+    LogFile logFile;
+
     @PostMapping("/api/prescription")
     public ResponseEntity<PrescriptionResponse> uploadPrescription(@RequestBody NewPrescriptionDto prescription, HttpServletRequest request, HttpServletResponse response){
         PrescriptionResponse prescriptionResponse=new PrescriptionResponse();
@@ -33,6 +37,7 @@ public class PrescriptionController {
         try{
             prescription.setUserId(userUtil.getUserDetails(request).getId());
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         try {
@@ -40,6 +45,7 @@ public class PrescriptionController {
 
             return ResponseEntity.ok(prescriptionResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -55,6 +61,23 @@ public class PrescriptionController {
 
             return ResponseEntity.ok(prescriptionResponse);
         }catch (Exception e){
+            logFile.error(e);
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok(prescriptionResponse);
+    }
+
+    @GetMapping("/api/prescription/{id}/{pid}")
+    public ResponseEntity<PrescriptionResponse> getAllUploadPrescription(@PathVariable int id,@PathVariable int pid, HttpServletRequest request, HttpServletResponse response){
+        PrescriptionResponse prescriptionResponse=new PrescriptionResponse();
+        prescriptionResponse.setResponse("failed");
+        try {
+            prescriptionResponse=uploadPrescriptionService.getAllUploadPrescription(id,pid);
+
+            return ResponseEntity.ok(prescriptionResponse);
+        }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -70,6 +93,7 @@ public class PrescriptionController {
 
             return ResponseEntity.ok(prescriptionResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -85,6 +109,7 @@ public class PrescriptionController {
 
             return ResponseEntity.ok(prescriptionResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -100,6 +125,7 @@ public class PrescriptionController {
 
             return ResponseEntity.ok(prescriptionResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 

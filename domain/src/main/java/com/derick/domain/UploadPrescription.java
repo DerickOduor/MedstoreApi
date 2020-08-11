@@ -35,7 +35,7 @@ public class UploadPrescription implements Serializable
     @JoinColumn(name = "pharmacy_id", referencedColumnName = "id", nullable = false)
     private Pharmacy pharmacy;
 
-    @OneToOne(mappedBy = "prescription")
+    @OneToOne(mappedBy = "prescription",fetch = FetchType.LAZY)
     private PrescriptionQuotation prescriptionQuotation;
 
     public Pharmacy getPharmacy() {

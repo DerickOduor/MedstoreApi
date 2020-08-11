@@ -1,13 +1,19 @@
 package com.derick.external.payment;
 
+import com.derick.utils.LogFile;
 import com.google.gson.Gson;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
 public class TransactionStatus {
+
+    @Autowired
+    LogFile logFile;
+
     final static Gson gson=new Gson();
     public static void transactionStatus(){
         OkHttpClient client = new OkHttpClient();
@@ -25,6 +31,7 @@ public class TransactionStatus {
                 .addHeader("authorization", "Bearer ACCESS_TOKEN")
                 .addHeader("content-type", "application/json")
                 .build();
+
 
         try {
             Response response = client.newCall(request).execute();

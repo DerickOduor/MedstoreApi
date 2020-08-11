@@ -4,6 +4,7 @@ import com.derick.application.configuration.JwtTokenUtil;
 import com.derick.dto.user.UserDto;
 import com.derick.mapper.user.UserMapper;
 import com.derick.service.IUserService;
+import com.derick.utils.LogFile;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class UserUtil {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    LogFile logFile;
 
     public UserDto getUserDetails(HttpServletRequest request){
         UserDto user=null;
@@ -49,6 +53,7 @@ public class UserUtil {
 
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return user;
     }
@@ -66,8 +71,10 @@ public class UserUtil {
                     username = jwtTokenUtil.getUsernameFromToken(jwtToken);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Unable to get JWT Token");
+                    logFile.error(e);
                 } catch (ExpiredJwtException e) {
                     System.out.println("JWT Token has expired");
+                    logFile.error(e);
                 }
             } else {
                 System.out.println("JWT Token does not begin with Bearer String");
@@ -81,6 +88,7 @@ public class UserUtil {
 
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return user;
     }

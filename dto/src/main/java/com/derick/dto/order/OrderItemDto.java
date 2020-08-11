@@ -5,7 +5,7 @@ import com.derick.dto.medstore.ViewMedicineDto;
 public class OrderItemDto {
     private int id;
     private ViewMedicineDto medicine;
-    private CustomerOrderDto order;
+    //private OrderSlipDto orderSlip;
 
     public int getId() {
         return id;
@@ -23,11 +23,11 @@ public class OrderItemDto {
         this.medicine = medicine;
     }
 
-    public CustomerOrderDto getOrder() {
-        return order;
+    /*public OrderSlipDto getOrderSlip() {
+        return orderSlip;
     }
 
-    public void setOrder(CustomerOrderDto order) {
-        this.order = order;
-    }
+    public void setOrderSlip(OrderSlipDto orderSlip) {
+        this.orderSlip = orderSlip;
+    }*/
 }

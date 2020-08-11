@@ -1,7 +1,9 @@
 package com.derick.external.payment;
 
+import com.derick.utils.LogFile;
 import com.google.gson.Gson;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.io.IOException;
 @Component
 public class PaymentReversal {
     final static Gson gson=new Gson();
+    @Autowired
+    LogFile logFile;
     public void reversePayment(){
         OkHttpClient client = new OkHttpClient();
 
@@ -31,9 +35,11 @@ public class PaymentReversal {
             try{
                 System.out.println("Response: "+gson.toJson(response));
             }catch (Exception e){
+                logFile.error(e);
                 e.printStackTrace();
             }
         } catch (IOException e) {
+            logFile.error(e);
             e.printStackTrace();
         }
     }

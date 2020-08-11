@@ -8,6 +8,15 @@ public class UserSigninResponse {
     public String Token;
     public JwtResponse jwtResponse;
     public UserDto UserDto;
+    private String MobileToken;
+
+    public String getMobileToken() {
+        return MobileToken;
+    }
+
+    public void setMobileToken(String mobileToken) {
+        MobileToken = mobileToken;
+    }
 
     public com.derick.dto.user.UserDto getUserDto() {
         return UserDto;

@@ -18,6 +18,17 @@ public class County implements Serializable {
     @Column(nullable = false)
     private String Code;
 
+    @Column(nullable = false)
+    private boolean Status;
+
+    public boolean isStatus() {
+        return Status;
+    }
+
+    public void setStatus(boolean status) {
+        this.Status = status;
+    }
+
     @OneToMany(mappedBy = "county", fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST)
     private Set<Pharmacy> pharmacies;

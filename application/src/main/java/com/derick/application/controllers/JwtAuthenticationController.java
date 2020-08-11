@@ -8,6 +8,7 @@ import com.derick.domain.JwtRequest;
 import com.derick.domain.JwtResponse;
 import com.derick.dto.signinoperations.UserSigninResponse;
 import com.derick.service.implemetation.JwtUserDetailsService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +37,9 @@ public class JwtAuthenticationController {
     UserUtil userUtil;
 
     @Autowired
+    LogFile logFile;
+
+    @Autowired
     private JwtUserDetailsService userDetailsService;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -52,6 +56,7 @@ public class JwtAuthenticationController {
             userSigninResponse.setUserDto(userUtil.getUserDetails(token));
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(userSigninResponse);
     }
@@ -60,8 +65,10 @@ public class JwtAuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
+            logFile.error(e);
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            logFile.error(e);
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }

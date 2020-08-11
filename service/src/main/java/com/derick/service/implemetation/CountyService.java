@@ -6,6 +6,7 @@ import com.derick.dto.county.CountyResponse;
 import com.derick.mapper.county.CountyMapper;
 import com.derick.repository.ICountyRepository;
 import com.derick.service.ICountyService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,9 @@ public class CountyService implements ICountyService {
     @Autowired
     CountyMapper countyMapper;
 
+    @Autowired
+    LogFile logFile;
+
     @Override
     @Transactional
     public CountyResponse getCounties() {
@@ -44,6 +48,7 @@ public class CountyService implements ICountyService {
             response.setCountyDtos(countyMapper.convertToDto(counties));
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -63,6 +68,30 @@ public class CountyService implements ICountyService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
+        }
+        return response;
+    }
+
+    @Override
+    public CountyResponse getCounty(boolean Status) {
+        CountyResponse response=new CountyResponse();
+        response.setResponse("failed");
+        try{
+            County county=new County();
+            List<County> counties=new ArrayList<>();
+            CriteriaBuilder builder=entityManager.getCriteriaBuilder();
+            CriteriaQuery<County> query=builder.createQuery(County.class);
+            Root<County> root=query.from(County.class);
+            query.select(root).where(builder.equal(root.get("Status"),Status));
+            Query q=entityManager.createQuery(query);
+            counties=q.getResultList();
+
+            response.setResponse("success");
+            response.setCountyDtos(countyMapper.convertToDto(counties));
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -88,6 +117,7 @@ public class CountyService implements ICountyService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -106,6 +136,7 @@ public class CountyService implements ICountyService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -129,6 +160,7 @@ public class CountyService implements ICountyService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -144,6 +176,7 @@ public class CountyService implements ICountyService {
             countyRepository.deleteById(CountyId);
             response.setResponse("success");
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 

@@ -11,8 +11,7 @@ public class OrderDeliveryInformation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "deliveryInformation",cascade = CascadeType.ALL)
     private CustomerOrder order;
 
     @Column(nullable = false)
@@ -23,6 +22,8 @@ public class OrderDeliveryInformation implements Serializable {
 
     @Column
     private String Address;
+
+
 
     public int getId() {
         return id;

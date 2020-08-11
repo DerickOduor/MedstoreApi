@@ -6,6 +6,7 @@ import com.derick.dto.pharmacy.PharmacyResponse;
 import com.derick.external.payment.mpesa.security.SecurityUtil;
 import com.derick.service.IPharmacyService;
 import com.derick.utils.GeoLocation;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -22,6 +23,9 @@ public class PharmacyController {
     @Autowired
     IPharmacyService pharmacyService;
 
+    @Autowired
+    LogFile logFile;
+
     @PostMapping(value = "/api/pharmacy")
     public ResponseEntity<PharmacyResponse> addPharmacy(@RequestBody PharmacyDto pharmacyDto){
         PharmacyResponse response=new PharmacyResponse();
@@ -29,6 +33,7 @@ public class PharmacyController {
         try{
             response=pharmacyService.savePharmacy(pharmacyDto);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return ResponseEntity.ok(response);
@@ -41,7 +46,21 @@ public class PharmacyController {
         try{
             response=pharmacyService.updatePharmacy(pharmacyDto);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping(value = "/api/pharmacy/updatemobiletoken")
+    public ResponseEntity<PharmacyResponse> updatemobiletoken(@RequestBody PharmacyDto pharmacyDto){
+        PharmacyResponse response=new PharmacyResponse();
+        response.setResponse("failed");
+        try{
+            response=pharmacyService.updatePharmacyMobuileToken(pharmacyDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(response);
     }
@@ -54,6 +73,7 @@ public class PharmacyController {
             response=pharmacyService.deletePharmacy(id);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(response);
     }
@@ -66,11 +86,12 @@ public class PharmacyController {
             response=pharmacyService.getPharmacies();
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/api/pharmacy/location")
+    @PostMapping(value = "/api/pharmacy/location")
     public  ResponseEntity<PharmacyResponse> getPharmacies(@RequestBody LocationDto locationDto){
         PharmacyResponse response=new PharmacyResponse();
         response.setResponse("failed");
@@ -78,6 +99,7 @@ public class PharmacyController {
             response=pharmacyService.getPharmaciesByLocation(locationDto);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(response);
     }
@@ -90,6 +112,7 @@ public class PharmacyController {
             response=pharmacyService.getPharmacy(id);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return ResponseEntity.ok(response);
     }
@@ -101,6 +124,7 @@ public class PharmacyController {
         try{
             response=pharmacyService.getPharmacy(name);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return ResponseEntity.ok(response);

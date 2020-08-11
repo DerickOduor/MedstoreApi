@@ -39,4 +39,18 @@ public class OrderItemMapper {
 
         return orderItemDtos;
     }
+
+    public List<OrderItem> convertToEntity(List<OrderItemDto> orderItems) throws Exception{
+        List<OrderItem> orderItemDtos = new ArrayList<>();
+
+        try{
+            for (OrderItemDto orderItem:orderItems){
+                orderItemDtos.add(convertToEntity(orderItem));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return orderItemDtos;
+    }
 }

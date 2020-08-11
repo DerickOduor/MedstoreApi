@@ -7,6 +7,7 @@ import com.derick.dto.payment.mpesa.MpesaUrlDto;
 import com.derick.mapper.payment.mpesa.MpesaParameterMapper;
 import com.derick.mapper.payment.mpesa.MpesaUrlMapper;
 import com.derick.service.IMpesaUrlService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,9 @@ public class MpesaUrlService implements IMpesaUrlService {
     @Autowired
     MpesaUrlMapper mpesaUrlMapper;
 
+    @Autowired
+    LogFile logFile;
+
     @Override
     @Transactional
     public MpesaResponse getUrl(String Name) {
@@ -49,6 +53,7 @@ public class MpesaUrlService implements IMpesaUrlService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         return response;
@@ -67,6 +72,7 @@ public class MpesaUrlService implements IMpesaUrlService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -104,6 +110,7 @@ public class MpesaUrlService implements IMpesaUrlService {
                 entityManager.persist(url3);
             }
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         try{
@@ -115,6 +122,7 @@ public class MpesaUrlService implements IMpesaUrlService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;

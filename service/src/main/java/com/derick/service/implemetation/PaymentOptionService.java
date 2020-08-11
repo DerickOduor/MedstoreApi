@@ -5,6 +5,7 @@ import com.derick.dto.payment.option.PaymentOptionDto;
 import com.derick.dto.payment.option.PaymentOptionResponse;
 import com.derick.mapper.payment.option.PaymentOptionMapper;
 import com.derick.service.IPaymentOptionService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,9 @@ public class PaymentOptionService implements IPaymentOptionService {
 
     @PersistenceContext
     EntityManager entityManager;
+
+    @Autowired
+    LogFile logFile;
 
     @Autowired
     PaymentOptionMapper paymentOptionMapper;
@@ -45,6 +49,7 @@ public class PaymentOptionService implements IPaymentOptionService {
             response.setResponse("success");
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -68,6 +73,7 @@ public class PaymentOptionService implements IPaymentOptionService {
             response.setResponse("success");
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -86,6 +92,7 @@ public class PaymentOptionService implements IPaymentOptionService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -103,6 +110,7 @@ public class PaymentOptionService implements IPaymentOptionService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -122,6 +130,7 @@ public class PaymentOptionService implements IPaymentOptionService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -142,6 +151,7 @@ public class PaymentOptionService implements IPaymentOptionService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;

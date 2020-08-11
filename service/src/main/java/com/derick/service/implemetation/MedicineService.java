@@ -10,6 +10,7 @@ import com.derick.mapper.medstore.AddMedicineMapper;
 import com.derick.mapper.medstore.ViewMedicineMapper;
 import com.derick.repository.IMedicineRepository;
 import com.derick.service.IMedicineService;
+import com.derick.utils.LogFile;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,9 @@ public class MedicineService implements IMedicineService {
     @Autowired
     AddMedicineMapper addMedicineMapper;
 
+    @Autowired
+    LogFile logFile;
+
     @Override
     @Transactional
     public ViewMedicineResponse getMedicine(int id) throws NotFoundException {
@@ -49,6 +53,7 @@ public class MedicineService implements IMedicineService {
             viewMedicineResponse.setResponse("success");
             return viewMedicineResponse;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         viewMedicineResponse.setResponse("failed");
@@ -66,6 +71,7 @@ public class MedicineService implements IMedicineService {
             return viewMedicineResponse;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         viewMedicineResponse.setResponse("failed");
         return viewMedicineResponse;
@@ -89,6 +95,7 @@ public class MedicineService implements IMedicineService {
             return viewMedicineResponse;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return viewMedicineResponse;
     }
@@ -110,6 +117,7 @@ public class MedicineService implements IMedicineService {
             viewMedicineResponse.setResponse("success");
             return viewMedicineResponse;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         viewMedicineResponse.setResponse("failed");
@@ -135,6 +143,7 @@ public class MedicineService implements IMedicineService {
                 try{
                     medicine1.setPriceAfterDiscount(((100.0-medicine1.getDiscount())*medicine1.getPrice())/100);
                 }catch (Exception e){
+                    logFile.error(e);
                     e.printStackTrace();
                 }
 
@@ -149,6 +158,7 @@ public class MedicineService implements IMedicineService {
             }
 
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         addMedicineResponse.setResponse("failed");
@@ -165,6 +175,7 @@ public class MedicineService implements IMedicineService {
 
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         try{
@@ -180,6 +191,7 @@ public class MedicineService implements IMedicineService {
                 return medicineResponse;
             }
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         medicineResponse.setResponse("failed");

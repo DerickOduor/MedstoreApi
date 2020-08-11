@@ -5,6 +5,7 @@ import com.derick.dto.delivery.OrderDeliveryResponse;
 import com.derick.dto.delivery.OrderDeliveryTypeDto;
 import com.derick.mapper.order.DeliveryTypeMapper;
 import com.derick.service.IOrderDeliveryTypeService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,9 @@ public class OrderDeliveryTypeService implements IOrderDeliveryTypeService {
     @Autowired
     DeliveryTypeMapper deliveryTypeMapper;
 
+    @Autowired
+    LogFile logFile;
+
     @Override
     @Transactional
     public OrderDeliveryResponse getDeliveryTypes() {
@@ -47,6 +51,7 @@ public class OrderDeliveryTypeService implements IOrderDeliveryTypeService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -64,6 +69,7 @@ public class OrderDeliveryTypeService implements IOrderDeliveryTypeService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -97,6 +103,7 @@ public class OrderDeliveryTypeService implements IOrderDeliveryTypeService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -120,6 +127,7 @@ public class OrderDeliveryTypeService implements IOrderDeliveryTypeService {
             }
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;

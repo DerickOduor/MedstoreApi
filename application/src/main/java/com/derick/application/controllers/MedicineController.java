@@ -5,6 +5,7 @@ import com.derick.dto.medstore.AddMedicineResponse;
 import com.derick.dto.medstore.ViewMedicineDto;
 import com.derick.dto.medstore.ViewMedicineResponse;
 import com.derick.service.IMedicineService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,8 +22,10 @@ public class MedicineController {
     @Autowired
     IMedicineService medicineService;
 
-    @GetMapping("/api/medicine")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Autowired
+    LogFile logFile;
+
+    @GetMapping("/api/medicine/get")
     public ResponseEntity<ViewMedicineResponse> getMedicine(HttpServletRequest request, HttpServletResponse response){
         ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
         viewMedicineResponse.setResponse("failed");
@@ -31,13 +34,14 @@ public class MedicineController {
             viewMedicineResponse=medicineService.getMedicine();
             return ResponseEntity.ok(viewMedicineResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
         return ResponseEntity.ok(viewMedicineResponse);
     }
 
-    @GetMapping("/api/medicine/{id}")
+    @GetMapping("/api/medicine/get/{id}")
     public ResponseEntity<ViewMedicineResponse> getMedicine(@PathVariable int id, HttpServletRequest request, HttpServletResponse response){
         ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
         viewMedicineResponse.setResponse("failed");
@@ -46,6 +50,7 @@ public class MedicineController {
             viewMedicineResponse=medicineService.getMedicine(id);
             return ResponseEntity.ok(viewMedicineResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -62,6 +67,7 @@ public class MedicineController {
             return ResponseEntity.ok(viewMedicineResponse);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         return ResponseEntity.ok(viewMedicineResponse);
@@ -76,6 +82,7 @@ public class MedicineController {
             viewMedicineResponse=medicineService.getMedicine(key);
             return ResponseEntity.ok(viewMedicineResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -91,6 +98,7 @@ public class MedicineController {
             viewMedicineResponse=medicineService.addMedicine(addMedicineDto);
             return ResponseEntity.ok(viewMedicineResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -106,6 +114,7 @@ public class MedicineController {
             viewMedicineResponse=medicineService.updateMedicine(viewMedicineDto);
             return ResponseEntity.ok(viewMedicineResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 

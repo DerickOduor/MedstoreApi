@@ -1,14 +1,19 @@
 package com.derick.service.implemetation;
 
-import com.derick.domain.CustomerOrder;
-import com.derick.domain.CustomerOrderNumber;
-import com.derick.domain.OrderDeliveryInformation;
+import com.derick.domain.*;
 import com.derick.dto.order.CustomerOrderDto;
 import com.derick.dto.order.CustomerOrderResponse;
+import com.derick.dto.order.OrderItemDto;
+import com.derick.dto.order.OrderSlipDto;
 import com.derick.mapper.order.CustomerOrderMapper;
 import com.derick.mapper.order.DeliveryInformationMapper;
+import com.derick.mapper.order.OrderItemMapper;
+import com.derick.mapper.order.OrderSlipMapper;
+import com.derick.repository.IOrderDeliveryInformationRepository;
 import com.derick.service.ICustomerOrderService;
+import com.derick.utils.LogFile;
 import com.derick.utils.RandomGenerator;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +24,16 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CustomerOrderService implements ICustomerOrderService {
 
     @Autowired
     CustomerOrderMapper orderMapper;
+
+    @Autowired
+    IOrderDeliveryInformationRepository deliveryInformationRepository;
 
     @Autowired
     DeliveryInformationMapper deliveryInformationMapper;
@@ -37,6 +44,15 @@ public class CustomerOrderService implements ICustomerOrderService {
     @Autowired
     RandomGenerator randomGenerator;
 
+    @Autowired
+    OrderSlipMapper orderSlipMapper;
+
+    @Autowired
+    OrderItemMapper orderItemMapper;
+
+    @Autowired
+    LogFile logFile;
+
     @Override
     @Transactional
     public CustomerOrderResponse getCustomersOrder(int CustomerId)
@@ -44,10 +60,11 @@ public class CustomerOrderService implements ICustomerOrderService {
         CustomerOrderResponse response=new CustomerOrderResponse();
         response.setResponse("failed");
         try{
+            User user=entityManager.find(User.class,CustomerId);
             CriteriaBuilder builder=entityManager.getCriteriaBuilder();
             CriteriaQuery<CustomerOrder> query=builder.createQuery(CustomerOrder.class);
             Root<CustomerOrder> root=query.from(CustomerOrder.class);
-            query.select(root).where(builder.equal(root.get("user.id"),CustomerId));
+            query.select(root).where(builder.equal(root.get("user"),user));
             Query q=entityManager.createQuery(query);
 
             List<CustomerOrder> orders=new ArrayList<>();
@@ -59,6 +76,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -96,6 +114,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -117,24 +136,70 @@ public class CustomerOrderService implements ICustomerOrderService {
             order=entityManager.find(CustomerOrder.class,orderDto.getId());
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         try{
             if (order==null){
+                OrderDeliveryInformation deliveryInformation=null;
+                if(orderDto.getDeliveryInformation()!=null){
+                    System.out.println("\n==DELIVERY INFO not NULL==\n");
+                    try{
+                        deliveryInformation=deliveryInformationMapper.convertToEntity(orderDto.getDeliveryInformation());
+                        //deliveryInformation.setOrder(order);
+                        deliveryInformationRepository.save(deliveryInformation);
+                        //entityManager.persist(deliveryInformation);
+                        //entityManager.getTransaction().commit();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        logFile.error(e);
+                    }
+                }else{
+                    System.out.println("\n==DELIVERY INFO NULL==\n");
+                }
                 order=orderMapper.convertToEntity(orderDto);
                 order.setOrderNumber(orderNo);
+                order.setApproved(false);
+                order.setDateOrdered(new Date());
+                order.setDeliveryInformation(deliveryInformation);
+                try{
+                    System.out.println("\n==order==\n"+new Gson().toJson(order)+"\n==end order==\n");
+                }catch (Exception e){
+                    e.printStackTrace();
+                    logFile.error(e);
+                }
                 entityManager.persist(order);
                 CustomerOrderNumber orderNumber=new CustomerOrderNumber();
                 orderNumber.setNumber(orderNo);
                 entityManager.persist(orderNumber);
 
-                if(orderDto.getDeliveryInformation()!=null){
+                if(!orderDto.getOrderSlips().isEmpty()){
                     try{
-                        OrderDeliveryInformation deliveryInformation=deliveryInformationMapper.convertToEntity(orderDto.getDeliveryInformation());
-                        deliveryInformation.setOrder(order);
+                        Set<OrderSlip> orderSlips=new HashSet<>();
+                        for(OrderSlipDto orderSlipDto:orderDto.getOrderSlips()){
+                            OrderSlip orderSlip=orderSlipMapper.convertToEntity(orderSlipDto);
+                            orderSlip.setCustomerOrder(order);
+                            orderSlip.setApproved(false);
+                            orderSlip.setSlipDate(new Date());
+                            Pharmacy pharmacy=entityManager.find(Pharmacy.class,orderSlipDto.getPharmacy().getId());
+                            orderSlip.setPharmacy(pharmacy);
+                            entityManager.persist(orderSlip);
+                            Set<OrderItem> orderItems=new HashSet<>();
 
-                        entityManager.persist(deliveryInformation);
+                            for(OrderItemDto orderItemDto:orderSlipDto.getOrder_slip_items()){
+                                OrderItem orderItem=orderItemMapper.convertToEntity(orderItemDto);
+                                orderItem.setOrderSlip(orderSlip);
+                                Medicine medicine=entityManager.find(Medicine.class,orderItemDto.getMedicine().getId());
+                                orderItem.setMedicine(medicine);
+                                entityManager.persist(orderItem);
+                                orderItems.add(orderItem);
+                            }
+                            orderSlip.setOrder_slip_items(orderItems);
+                            orderSlips.add(orderSlip);
+                        }
+                        order.setOrderSlips(orderSlips);
                     }catch (Exception e){
                         e.printStackTrace();
+                        logFile.error(e);
                     }
                 }
 
@@ -147,6 +212,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             }
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -174,6 +240,7 @@ public class CustomerOrderService implements ICustomerOrderService {
                 orderNumber=orderNumbers.get(0);
             }catch (Exception e){
                 e.printStackTrace();
+                logFile.error(e);
             }
 
             if(orderNumber!=null){
@@ -186,6 +253,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -200,7 +268,7 @@ public class CustomerOrderService implements ICustomerOrderService {
         try{
             order=entityManager.find(CustomerOrder.class,orderDto.getId());
             if(order!=null){
-                if(order.isApproved()){
+                if(order.isPaid()){
                     CustomerOrderNumber orderNumber=null;
                     CriteriaBuilder builder=entityManager.getCriteriaBuilder();
                     CriteriaQuery<CustomerOrderNumber> query=builder.createQuery(CustomerOrderNumber.class);
@@ -214,6 +282,7 @@ public class CustomerOrderService implements ICustomerOrderService {
                         orderNumber=orderNumbers.get(0);
                     }catch (Exception e){
                         e.printStackTrace();
+                        logFile.error(e);
                     }
                     if(orderNumber!=null){
                         order.setApproved(true);
@@ -232,6 +301,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -276,6 +346,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             return response;
 
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;

@@ -15,16 +15,16 @@ public class CustomerOrderDto {
     private boolean Paid;
     private double Price;
     private double TotalPrice;
-    private Set<OrderItemDto> orderItems;
+    private Set<OrderSlipDto> orderSlips;
     private OrderDeliveryTypeDto DeliveryType;
     private DeliveryInformationDto deliveryInformation;
 
-    public DeliveryInformationDto getDeliveryInformation() {
-        return deliveryInformation;
+    public int getId() {
+        return id;
     }
 
-    public void setDeliveryInformation(DeliveryInformationDto deliveryInformation) {
-        this.deliveryInformation = deliveryInformation;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getOrderNumber() {
@@ -33,30 +33,6 @@ public class CustomerOrderDto {
 
     public void setOrderNumber(String orderNumber) {
         OrderNumber = orderNumber;
-    }
-
-    public boolean isPaid() {
-        return Paid;
-    }
-
-    public void setPaid(boolean paid) {
-        Paid = paid;
-    }
-
-    public OrderDeliveryTypeDto getDeliveryType() {
-        return DeliveryType;
-    }
-
-    public void setDeliveryType(OrderDeliveryTypeDto deliveryType) {
-        DeliveryType = deliveryType;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public UserDto getUser() {
@@ -83,6 +59,14 @@ public class CustomerOrderDto {
         Approved = approved;
     }
 
+    public boolean isPaid() {
+        return Paid;
+    }
+
+    public void setPaid(boolean paid) {
+        Paid = paid;
+    }
+
     public double getPrice() {
         return Price;
     }
@@ -99,11 +83,27 @@ public class CustomerOrderDto {
         TotalPrice = totalPrice;
     }
 
-    public Set<OrderItemDto> getOrderItems() {
-        return orderItems;
+    public Set<OrderSlipDto> getOrderSlips() {
+        return orderSlips;
     }
 
-    public void setOrderItems(Set<OrderItemDto> orderItems) {
-        this.orderItems = orderItems;
+    public void setOrderSlips(Set<OrderSlipDto> orderSlips) {
+        this.orderSlips = orderSlips;
+    }
+
+    public OrderDeliveryTypeDto getDeliveryType() {
+        return DeliveryType;
+    }
+
+    public void setDeliveryType(OrderDeliveryTypeDto deliveryType) {
+        DeliveryType = deliveryType;
+    }
+
+    public DeliveryInformationDto getDeliveryInformation() {
+        return deliveryInformation;
+    }
+
+    public void setDeliveryInformation(DeliveryInformationDto deliveryInformation) {
+        this.deliveryInformation = deliveryInformation;
     }
 }

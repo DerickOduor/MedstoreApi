@@ -22,6 +22,15 @@ public class UserSignUpDto {
     private String Password;
     private Set<RoleDto> roles = new HashSet<>();
     private PharmacyDto pharmacy;
+    private String MobileToken;
+
+    public String getMobileToken() {
+        return MobileToken;
+    }
+
+    public void setMobileToken(String mobileToken) {
+        MobileToken = mobileToken;
+    }
 
     public PharmacyDto getPharmacy() {
         return pharmacy;

@@ -1,5 +1,6 @@
 package com.derick.service.implemetation;
 
+import com.derick.domain.Pharmacy;
 import com.derick.domain.UploadPrescription;
 import com.derick.domain.User;
 import com.derick.dto.prescription.NewPrescriptionDto;
@@ -10,6 +11,7 @@ import com.derick.repository.IUploadPrescriptionRepository;
 import com.derick.repository.IUserRepository;
 import com.derick.service.IUploadPrescriptionService;
 import com.derick.service.IUserService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +51,9 @@ public class UploadPrescriptionService implements IUploadPrescriptionService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    LogFile logFile;
+
     @Override
     @Transactional
     public PrescriptionResponse saveUploadPrescription(NewPrescriptionDto uploadPrescription) throws Exception {
@@ -67,6 +72,7 @@ public class UploadPrescriptionService implements IUploadPrescriptionService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         return response;
@@ -91,6 +97,7 @@ public class UploadPrescriptionService implements IUploadPrescriptionService {
             response.setPresciptions(prescriptionMapper.convertToDto(prescriptions));
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -98,14 +105,19 @@ public class UploadPrescriptionService implements IUploadPrescriptionService {
 
     @Override
     @Transactional
-    public PrescriptionResponse getAllPharmacyUploadPrescription(int PharmacyId) throws Exception {
+    public PrescriptionResponse getAllUploadPrescription(int CustomerId, int PharmacyId) throws Exception {
         PrescriptionResponse response=new PrescriptionResponse();
         response.setResponse("failed");
+        Pharmacy pharmacy;
+        User user;
         try{
+            user=entityManager.find(User.class,CustomerId);
+            pharmacy=entityManager.find(Pharmacy.class,PharmacyId);
             CriteriaBuilder builder=entityManager.getCriteriaBuilder();
             CriteriaQuery<UploadPrescription> query=builder.createQuery(UploadPrescription.class);
             Root<UploadPrescription> root=query.from(UploadPrescription.class);
-            query.select(root).where(builder.equal(root.get("pharmacy.id"),PharmacyId));
+            query.select(root).where(builder.equal(root.get("user"),user))
+                    .where(builder.equal(root.get("pharmacy"),pharmacy));
             Query q=entityManager.createQuery(query);
             List<UploadPrescription> prescriptions=new ArrayList<>();
             prescriptions=q.getResultList();
@@ -115,6 +127,33 @@ public class UploadPrescriptionService implements IUploadPrescriptionService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
+        }
+        return response;
+    }
+
+    @Override
+    @Transactional
+    public PrescriptionResponse getAllPharmacyUploadPrescription(int PharmacyId) throws Exception {
+        PrescriptionResponse response=new PrescriptionResponse();
+        response.setResponse("failed");
+        Pharmacy pharmacy=null;
+        try{
+            pharmacy=entityManager.find(Pharmacy.class,PharmacyId);
+            CriteriaBuilder builder=entityManager.getCriteriaBuilder();
+            CriteriaQuery<UploadPrescription> query=builder.createQuery(UploadPrescription.class);
+            Root<UploadPrescription> root=query.from(UploadPrescription.class);
+            query.select(root).where(builder.equal(root.get("pharmacy"),pharmacy));
+            Query q=entityManager.createQuery(query);
+            List<UploadPrescription> prescriptions=new ArrayList<>();
+            prescriptions=q.getResultList();
+
+            response.setResponse("success");
+            response.setPresciptions(prescriptionMapper.convertToDto(prescriptions));
+            return response;
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -134,6 +173,7 @@ public class UploadPrescriptionService implements IUploadPrescriptionService {
             //return uploadPrescriptionService.getUploadPrescription(UploadPrescriptionId);
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -161,6 +201,7 @@ public class UploadPrescriptionService implements IUploadPrescriptionService {
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         response=new PrescriptionResponse();

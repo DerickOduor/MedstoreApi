@@ -4,7 +4,9 @@ import com.derick.domain.StkPushRequest;
 import com.derick.dto.payment.mpesa.stkpush.Item;
 import com.derick.dto.payment.mpesa.stkpush.MpesaCallBackResponse;
 import com.derick.service.IStkPushService;
+import com.derick.utils.LogFile;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +21,16 @@ public class StkPushService implements IStkPushService {
 
     Gson gson=new Gson();
 
+    @Autowired
+    LogFile logFile;
+
     @Override
     @Transactional
     public void addStkPushRequest(StkPushRequest stkPushRequest) {
         try{
             entityManager.persist(stkPushRequest);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
     }
@@ -66,6 +72,7 @@ public class StkPushService implements IStkPushService {
             System.out.println("TO DB: "+gson.toJson(callBackResponse));
             entityManager.persist(callBackResponse);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
     }

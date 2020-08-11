@@ -1,7 +1,10 @@
 package com.derick.dto.user;
 
+import com.derick.domain.Pharmacy;
+import com.derick.dto.pharmacy.PharmacyDto;
 import com.derick.dto.userrole.RoleDto;
 
+import javax.persistence.Column;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,16 +19,51 @@ public class UserDto {
     private Date DateRegistered;
     private boolean RegistrationConfirmed;
     private boolean Locked;
+    private String Otp;
     private boolean OtpConfirmed;
     private Date OtpDate;
     private Set<RoleDto> roles = new HashSet<>();
+    Set<PharmacyDto> pharmacies=new HashSet<>();
+    private String MobileToken;
 
-    public Set<RoleDto> getRoles() {
-        return roles;
+    public String getOtp() {
+        return Otp;
     }
 
-    public void setRoles(Set<RoleDto> roles) {
-        this.roles = roles;
+    public void setOtp(String otp) {
+        Otp = otp;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstname() {
+        return Firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        Firstname = firstname;
+    }
+
+    public String getLastname() {
+        return Lastname;
+    }
+
+    public void setLastname(String lastname) {
+        Lastname = lastname;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
     }
 
     public String getPhone() {
@@ -76,35 +114,27 @@ public class UserDto {
         OtpDate = otpDate;
     }
 
-    public int getId() {
-        return id;
+    public Set<RoleDto> getRoles() {
+        return roles;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRoles(Set<RoleDto> roles) {
+        this.roles = roles;
     }
 
-    public String getFirstname() {
-        return Firstname;
+    public Set<PharmacyDto> getPharmacies() {
+        return pharmacies;
     }
 
-    public void setFirstname(String firstname) {
-        Firstname = firstname;
+    public void setPharmacies(Set<PharmacyDto> pharmacies) {
+        this.pharmacies = pharmacies;
     }
 
-    public String getLastname() {
-        return Lastname;
+    public String getMobileToken() {
+        return MobileToken;
     }
 
-    public void setLastname(String lastname) {
-        Lastname = lastname;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
+    public void setMobileToken(String mobileToken) {
+        MobileToken = mobileToken;
     }
 }

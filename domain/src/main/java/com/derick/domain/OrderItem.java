@@ -11,9 +11,9 @@ public class OrderItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
-    private CustomerOrder order;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false,cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_slip_id", referencedColumnName = "id", nullable = false)
+    private OrderSlip orderSlip;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "medicine_id", referencedColumnName = "id", nullable = false)
@@ -30,6 +30,14 @@ public class OrderItem implements Serializable {
         return price;
     }
 
+    public OrderSlip getOrderSlip() {
+        return orderSlip;
+    }
+
+    public void setOrderSlip(OrderSlip orderSlip) {
+        this.orderSlip = orderSlip;
+    }
+
     public int getId() {
         return id;
     }
@@ -38,13 +46,13 @@ public class OrderItem implements Serializable {
         this.id = id;
     }
 
-    public CustomerOrder getOrder() {
+    /*public CustomerOrder getOrder() {
         return order;
     }
 
     public void setOrder(CustomerOrder order) {
         this.order = order;
-    }
+    }*/
 
     public Medicine getMedicine() {
         return medicine;

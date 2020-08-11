@@ -1,10 +1,7 @@
 package com.derick.dto.pharmacy;
 
-import com.derick.domain.Medicine;
-import com.derick.domain.UploadPrescription;
 import com.derick.dto.county.CountyDto;
-import com.derick.dto.medstore.ViewMedicineDto;
-import com.derick.dto.prescription.PresciptionDto;
+import com.derick.dto.order.OrderSlipDto;
 
 import java.util.Date;
 import java.util.Set;
@@ -27,7 +24,25 @@ public class PharmacyDto {
     private Date DateEdited;
     private Date DateDeleted;
     private CountyDto county;
-    private Set<PresciptionDto> uploadPrescriptions;
+    private String MobileToken;
+    private Set<OrderSlipDto> orderSlips;
+
+    public Set<OrderSlipDto> getOrderSlips() {
+        return orderSlips;
+    }
+
+    public void setOrderSlips(Set<OrderSlipDto> orderSlips) {
+        this.orderSlips = orderSlips;
+    }
+
+    public String getMobileToken() {
+        return MobileToken;
+    }
+
+    public void setMobileToken(String mobileToken) {
+        MobileToken = mobileToken;
+    }
+    /*private Set<PresciptionDto> uploadPrescriptions;
     private Set<ViewMedicineDto> medicines;
 
     public Set<ViewMedicineDto> getMedicines() {
@@ -44,7 +59,7 @@ public class PharmacyDto {
 
     public void setUploadPrescriptions(Set<PresciptionDto> uploadPrescriptions) {
         this.uploadPrescriptions = uploadPrescriptions;
-    }
+    }*/
 
     public String getLatitude() {
         return Latitude;

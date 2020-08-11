@@ -6,6 +6,7 @@ import com.derick.dto.county.CountyResponse;
 public interface ICountyService {
     public CountyResponse getCounties();
     public CountyResponse getCounty(int CountyId);
+    public CountyResponse getCounty(boolean Status);
     public CountyResponse getCounty(String CountyName);
     public CountyResponse saveCounty(CountyDto countyDto);
     public CountyResponse updateCounty(CountyDto countyDto);

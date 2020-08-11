@@ -1,6 +1,7 @@
 package com.derick.dto.prescription;
 
 import com.derick.dto.pharmacy.PharmacyDto;
+import com.derick.dto.quotation.QuotationDto;
 import com.derick.dto.user.UserDto;
 
 import javax.persistence.*;
@@ -19,6 +20,15 @@ public class PresciptionDto {
     private UserDto userDto;
 
     private PharmacyDto pharmacy;
+    private Quote prescriptionQuotation;
+
+    public Quote getPrescriptionQuotation() {
+        return prescriptionQuotation;
+    }
+
+    public void setPrescriptionQuotation(Quote prescriptionQuotation) {
+        this.prescriptionQuotation = prescriptionQuotation;
+    }
 
     public UserDto getUserDto() {
         return userDto;

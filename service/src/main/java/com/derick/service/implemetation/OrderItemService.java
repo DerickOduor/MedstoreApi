@@ -5,6 +5,7 @@ import com.derick.domain.PaymentOption;
 import com.derick.dto.order.OrderItemResponse;
 import com.derick.mapper.order.OrderItemMapper;
 import com.derick.service.IOrderItemService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,9 @@ public class OrderItemService implements IOrderItemService {
     @PersistenceContext
     EntityManager entityManager;
 
+    @Autowired
+    LogFile logFile;
+
     @Override
     @Transactional
     public OrderItemResponse getItems(int OrderId) {
@@ -48,6 +52,7 @@ public class OrderItemService implements IOrderItemService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -65,6 +70,7 @@ public class OrderItemService implements IOrderItemService {
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }

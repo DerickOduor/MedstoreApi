@@ -12,6 +12,7 @@ import com.derick.repository.IMedicineRepository;
 import com.derick.repository.IPrescriptionQuotationRepository;
 import com.derick.repository.IUploadPrescriptionRepository;
 import com.derick.service.IPrescriptionQuotationService;
+import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,9 @@ public class PrescriptionQuotationService implements IPrescriptionQuotationServi
 
     @Autowired
     IUploadPrescriptionRepository prescriptionRepository;
+
+    @Autowired
+    LogFile logFile;
 
     @Autowired
     QuotationMapper quotationMapper;
@@ -76,6 +80,7 @@ public class PrescriptionQuotationService implements IPrescriptionQuotationServi
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         return response;
     }
@@ -101,6 +106,7 @@ public class PrescriptionQuotationService implements IPrescriptionQuotationServi
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -131,6 +137,7 @@ public class PrescriptionQuotationService implements IPrescriptionQuotationServi
             return response;
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         return response;
@@ -155,6 +162,7 @@ public class PrescriptionQuotationService implements IPrescriptionQuotationServi
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -172,6 +180,7 @@ public class PrescriptionQuotationService implements IPrescriptionQuotationServi
 
             return response;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;
@@ -200,6 +209,7 @@ public class PrescriptionQuotationService implements IPrescriptionQuotationServi
             response.setQuotations(quotationMapper.convertToDto(quotations));
             response.setResponse("success");
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return response;

@@ -6,6 +6,7 @@ import com.derick.dto.userrole.RoleDto;
 import com.derick.mapper.roles.RoleMapper;
 import com.derick.repository.IRoleRepository;
 import com.derick.service.IRoleService;
+import com.derick.utils.LogFile;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class RoleService implements IRoleService {
     @PersistenceContext
     EntityManager entityManager;
 
+    @Autowired
+    LogFile logFile;
+
     /*@Autowired
     Gson gson;*/
 
@@ -56,6 +60,7 @@ public class RoleService implements IRoleService {
 
             return roles.get(0);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return null;
@@ -73,6 +78,7 @@ public class RoleService implements IRoleService {
             roleDtoResponse.setResponse("success");
             return roleDtoResponse;
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
@@ -101,6 +107,7 @@ public class RoleService implements IRoleService {
                 System.out.println("R: "+gson.toJson(role));
             }*/
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return null;

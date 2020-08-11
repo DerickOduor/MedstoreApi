@@ -3,20 +3,25 @@ package com.derick.service.implemetation;
 import com.derick.domain.Pharmacy;
 import com.derick.domain.Role;
 import com.derick.domain.User;
+import com.derick.dto.signinoperations.UserSigninResponse;
 import com.derick.dto.signupoperations.UserConfirmOtpDto;
 import com.derick.dto.signupoperations.UserConfirmOtpResponse;
 import com.derick.dto.signupoperations.UserSignUpDto;
 import com.derick.dto.signupoperations.UserSignUpResponse;
+import com.derick.dto.user.UserDto;
 import com.derick.mapper.UserConfirmOtpMapMapper;
 import com.derick.mapper.UserSignUpMapMapper;
+import com.derick.mapper.user.UserMapper;
 import com.derick.repository.IRoleRepository;
 import com.derick.repository.IUserRepository;
 import com.derick.service.IRoleService;
 import com.derick.service.IUserService;
 import com.derick.utils.AppMailer;
+import com.derick.utils.LogFile;
 import com.derick.utils.RandomGenerator;
 import com.google.gson.Gson;
 import javassist.NotFoundException;
+import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,9 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -59,6 +63,14 @@ public class UserService implements IUserService {
     @Autowired
     IRoleService roleService;
 
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    LogFile logFile;
+
+    Gson gson=new Gson();
+
     @Override
     @Transactional
     public User getUser(String username) throws NotFoundException {
@@ -71,6 +83,7 @@ public class UserService implements IUserService {
         try{
             return entityManager.find(User.class,id);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return null;
@@ -90,6 +103,7 @@ public class UserService implements IUserService {
 
             return userList.get(0);
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
         return null;
@@ -106,6 +120,21 @@ public class UserService implements IUserService {
             Query q=entityManager.createQuery(query);
             List<User> userList=new ArrayList<>();
             userList=q.getResultList();
+            User user=userList.get(0);
+
+            try{
+                /*CriteriaBuilder criteriaBuilder=entityManager.getCriteriaBuilder();
+                CriteriaQuery<Pharmacy> criteriaQuery=criteriaBuilder.createQuery(Pharmacy.class);
+                Root<Pharmacy> from=criteriaQuery.from(Pharmacy.class);
+                Join<Pharmacy,User> join=from.join("users", JoinType.LEFT);
+                criteriaQuery.where(criteriaBuilder.equal(join.get("id"),user.getId()));
+                TypedQuery<Pharmacy> typedQuery=entityManager.createQuery(criteriaQuery);
+                List<Pharmacy> pharmacies=typedQuery.getResultList();
+                System.out.println("PHA:\n"+gson.toJson(pharmacies));*/
+            }catch (Exception e){
+                e.printStackTrace();
+                logFile.error(e);
+            }
 
             return userList.get(0);
         }catch (Exception e){
@@ -163,6 +192,7 @@ public class UserService implements IUserService {
                     }
                 }catch (Exception e){
                     e.printStackTrace();
+                    logFile.error(e);
                 }
                 entityManager.persist(user);
                 if(user.getRoles()!=null){
@@ -177,6 +207,7 @@ public class UserService implements IUserService {
                             }
                         }catch (Exception e){
                             e.printStackTrace();
+                            logFile.error(e);
                         }
                         if(role!=null){
                             Pharmacy pharmacy=null;
@@ -187,6 +218,7 @@ public class UserService implements IUserService {
                                 pharmacy.setUsers(users);
                             }catch (Exception e){
                                 e.printStackTrace();
+                                logFile.error(e);
                             }
                         }
                     }
@@ -203,15 +235,42 @@ public class UserService implements IUserService {
                                         " Welcome to Pharmacy.");
                     }catch (Exception e){
                         e.printStackTrace();
+                        logFile.error(e);
                     }
                 }
                 return userSignUpResponse;
             }
         }catch (Exception e){
+            logFile.error(e);
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    @Override
+    @Transactional
+    public UserSigninResponse updateMobileToken(UserDto user) throws Exception {
+        UserSigninResponse response=new UserSigninResponse();
+        response.setResponse("failed");
+        try{
+            User user1=entityManager.find(User.class,user.getId());
+            user1.setMobileToken(user.getMobileToken());
+            userRepository.save(user1);
+            //entityManager.co
+            //entityManager.detach(user1);
+            //entityManager.merge(user1);
+            //entityManager.getTransaction().commit();
+
+            response.setUserDto(userMapper.convertToDto(user1));
+            response.setResponse("success");
+
+            return response;
+        }catch (Exception e){
+            logFile.error(e);
+            e.printStackTrace();
+        }
+        return response;
     }
 
     @Override
@@ -239,6 +298,7 @@ public class UserService implements IUserService {
                                         new SimpleDateFormat("dd-M-yyyy hh:mm:ss").format(new Date())+
                                 ". If this was not you, consider changing your password.");
                     }catch (Exception e){
+                        logFile.error(e);
                         e.printStackTrace();
                     }
                 }
@@ -250,6 +310,7 @@ public class UserService implements IUserService {
                 userSignUpResponse.setResponse("failed");
             }
         }catch (Exception e){
+            logFile.error(e);
             response="failed";
             userSignUpResponse.setResponse("failed");
             e.printStackTrace();
@@ -291,6 +352,7 @@ public class UserService implements IUserService {
                 userConfirmOtpResponse.setResponse("failed");
             }
         }catch (Exception e){
+            logFile.error(e);
             userConfirmOtpResponse.setResponse("failed");
             e.printStackTrace();
         }
@@ -337,6 +399,7 @@ public class UserService implements IUserService {
                 usersendOtpResponse.setResponse("failed");
             }
         }catch (Exception e){
+            logFile.error(e);
             response="failed";
             usersendOtpResponse.setResponse("failed");
             e.printStackTrace();

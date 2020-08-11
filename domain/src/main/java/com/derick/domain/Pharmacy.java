@@ -29,6 +29,17 @@ public class Pharmacy implements Serializable {
     @Column(nullable = false)
     private boolean Locked;
 
+    @Column
+    private String MobileToken;
+
+    public String getMobileToken() {
+        return MobileToken;
+    }
+
+    public void setMobileToken(String mobileToken) {
+        MobileToken = mobileToken;
+    }
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "pharmacy_user",
@@ -84,17 +95,28 @@ public class Pharmacy implements Serializable {
     @Column(nullable = false)
     private Date DateEdited;
 
-    @Column(nullable = false)
+    @Column
     private Date DateDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "county_id", referencedColumnName = "id", nullable = false)
     private County county;
 
-
     @OneToMany(mappedBy = "pharmacy", fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST)
     private Set<Medicine> medicines;
+
+    @OneToMany(mappedBy = "pharmacy", fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST)
+    private Set<OrderSlip> orderSlips;
+
+    public Set<OrderSlip> getOrderSlips() {
+        return orderSlips;
+    }
+
+    public void setOrderSlips(Set<OrderSlip> orderSlips) {
+        this.orderSlips = orderSlips;
+    }
 
     public Set<Medicine> getMedicines() {
         return medicines;

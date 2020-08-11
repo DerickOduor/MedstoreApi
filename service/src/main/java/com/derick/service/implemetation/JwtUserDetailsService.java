@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.derick.domain.Role;
+import com.derick.utils.LogFile;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,6 +30,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @PersistenceContext
     EntityManager entityManager;
+
+    @Autowired
+    LogFile logFile;
 
     /*@Autowired
     Gson gson;*/
@@ -68,6 +72,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
         //System.out.println("USER: "+gson.toJson(user));
         if(user!=null)
@@ -114,6 +119,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             //System.out.println("ROLES: "+gson.toJson(roles));
         }catch (Exception e){
             e.printStackTrace();
+            logFile.error(e);
         }
 
         return authorities;

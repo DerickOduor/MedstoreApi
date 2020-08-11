@@ -52,6 +52,17 @@ public class User implements Serializable
     private String Password;
 
     @Column
+    private String MobileToken;
+
+    public String getMobileToken() {
+        return MobileToken;
+    }
+
+    public void setMobileToken(String mobileToken) {
+        MobileToken = mobileToken;
+    }
+
+    @Column
     private String Otp;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -85,6 +96,17 @@ public class User implements Serializable
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST)
     private Set<CustomerOrder> customerOrders;
+
+    @ManyToMany(mappedBy="users",fetch = FetchType.EAGER)
+    Set<Pharmacy> pharmacies=new HashSet<>();
+
+    public Set<Pharmacy> getPharmacies() {
+        return pharmacies;
+    }
+
+    public void setPharmacies(Set<Pharmacy> pharmacies) {
+        this.pharmacies = pharmacies;
+    }
 
     public Set<StkPushRequest> getStkPushRequests() {
         return stkPushRequests;
