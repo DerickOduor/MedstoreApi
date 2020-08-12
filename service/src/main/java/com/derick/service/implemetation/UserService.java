@@ -9,6 +9,7 @@ import com.derick.dto.signupoperations.UserConfirmOtpResponse;
 import com.derick.dto.signupoperations.UserSignUpDto;
 import com.derick.dto.signupoperations.UserSignUpResponse;
 import com.derick.dto.user.UserDto;
+import com.derick.dto.userrole.RoleDto;
 import com.derick.mapper.UserConfirmOtpMapMapper;
 import com.derick.mapper.UserSignUpMapMapper;
 import com.derick.mapper.user.UserMapper;
@@ -69,7 +70,7 @@ public class UserService implements IUserService {
     @Autowired
     LogFile logFile;
 
-    Gson gson=new Gson();
+    //Gson gson=new Gson();
 
     @Override
     @Transactional
@@ -149,8 +150,9 @@ public class UserService implements IUserService {
         User user=new User();
         user= userSignUpMapMapper.convertToEntity(userSignUpDto);
         UserSignUpResponse userSignUpResponse=new UserSignUpResponse();
+        userSignUpResponse.setResponse("failed");
         //entityManager.getTransaction().begin();
-        Gson gson=new Gson();
+        logFile.events("User Sign up: "+(userSignUpDto.getEmail()));
         try{
             CriteriaBuilder builder=entityManager.getCriteriaBuilder();
             CriteriaQuery<User> query=builder.createQuery(User.class);
@@ -159,24 +161,32 @@ public class UserService implements IUserService {
             Query q=entityManager.createQuery(query);
             List<User> userList=new ArrayList<>();
             userList=q.getResultList();
-            System.out.println("wrY: "+gson.toJson(userList)+" User: "+gson.toJson(user));
+            logFile.events("User Sign up-: "+(userSignUpDto.getEmail()));
+            //System.out.println("wrY: "+gson.toJson(userList)+" User: "+gson.toJson(user));
             if(userList.size()>0){
-                System.out.println("Y: "+gson.toJson(userList));
+                //System.out.println("Y: "+gson.toJson(userList));
                 userSignUpResponse.setResponse("User already exists.");
+                logFile.events("User Sign up--: "+(userSignUpDto.getEmail()));
                 return userSignUpResponse;
             }
             query.select(root).where(builder.equal(root.get("Email"),userSignUpDto.getEmail().trim()));
             q=entityManager.createQuery(query);
             userList=q.getResultList();
-            System.out.println("Ydfgr: "+gson.toJson(userList));
+            //System.out.println("Ydfgr: "+gson.toJson(userList));
             if(userList.size()>0){
                 System.out.println("Ztyj: "+userList.size());
                 userSignUpResponse.setResponse("User already exists.");
+                logFile.events("User Sign up---: "+(userSignUpDto.getEmail()));
 
                 return userSignUpResponse;
             }
             if(userList.size()==0){
                 System.out.println("ytuX: "+userList.size());
+                try{
+                    logFile.events("User Sign up----: "+(userSignUpDto.getEmail())+" Role: "+userSignUpDto.getRoles().size());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 user.setDateRegistered(new Date());
                 user.setRegistrationConfirmed(false);
                 String st="";
@@ -184,10 +194,19 @@ public class UserService implements IUserService {
                 user.setOtp(st);
                 user.setOtpDate(new Date());
                 try{
-                    if(userSignUpDto.getRoles()==null){
+                    if(userSignUpDto.getRoles().size()==0){
+                        logFile.events("User Sign up-----: "+(userSignUpDto.getEmail()));
                         Set<Role> roles = new HashSet<>();
                         roles.add(roleService.getRole("ROLE_USER"));
                         //user.setRoles(Arrays.asList(roles));
+                        user.setRoles(roles);
+                    }else if(userSignUpDto.getRoles().size()>0){
+                        logFile.events("User Sign up has role------: "+(userSignUpDto.getEmail()));
+                        Set<Role> roles = new HashSet<>();
+                        for(RoleDto roleDto:userSignUpDto.getRoles()){
+                            Role role=roleService.getRole(roleDto.getName());
+                            roles.add(role);
+                        }
                         user.setRoles(roles);
                     }
                 }catch (Exception e){
@@ -195,8 +214,9 @@ public class UserService implements IUserService {
                     logFile.error(e);
                 }
                 entityManager.persist(user);
+                logFile.events("User Sign up-suc: "+(userSignUpDto.getEmail()));
                 if(user.getRoles()!=null){
-                    if(user.getRoles().size()!=0){
+                    if(user.getRoles().size()>0){
                         Role role=null;
                         try{
                             //role=user.getRoles().iterator().next();
@@ -238,6 +258,7 @@ public class UserService implements IUserService {
                         logFile.error(e);
                     }
                 }
+                logFile.events("User Sign up==: "+(userSignUpDto.getEmail()));
                 return userSignUpResponse;
             }
         }catch (Exception e){
@@ -245,7 +266,7 @@ public class UserService implements IUserService {
             e.printStackTrace();
         }
 
-        return null;
+        return userSignUpResponse;
     }
 
     @Override

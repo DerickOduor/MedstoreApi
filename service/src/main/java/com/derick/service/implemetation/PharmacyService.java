@@ -2,12 +2,14 @@ package com.derick.service.implemetation;
 
 import com.derick.domain.County;
 import com.derick.domain.Pharmacy;
+import com.derick.domain.SystemParameter;
 import com.derick.dto.pharmacy.LocationDto;
 import com.derick.dto.pharmacy.PharmacyDto;
 import com.derick.dto.pharmacy.PharmacyResponse;
 import com.derick.mapper.pharmacy.PharmacyMapper;
 import com.derick.repository.IPharmacyRepository;
 import com.derick.service.IPharmacyService;
+import com.derick.service.ISystemParameterService;
 import com.derick.utils.GeoLocation;
 import com.derick.utils.LogFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,9 @@ public class PharmacyService implements IPharmacyService {
     GeoLocation geoLocation;
 
     @Autowired
+    ISystemParameterService systemParameterService;
+
+    @Autowired
     LogFile logFile;
 
     @Override
@@ -50,6 +55,7 @@ public class PharmacyService implements IPharmacyService {
         try{
             List<Pharmacy> pharmacies= (List<Pharmacy>) pharmacyRepository.findAll();
             response.setResponse("success");
+
             response.setPharmacyDtos(pharmacyMapper.convertToDto(pharmacies));
 
             return response;
@@ -199,10 +205,22 @@ public class PharmacyService implements IPharmacyService {
     {
         PharmacyResponse response=new PharmacyResponse();
         response.setResponse("failed");
+        SystemParameter systemParameter=null;
+        List<Pharmacy> nearestPharmacies=new ArrayList<>();
+        try{
+            systemParameter=systemParameterService.getSystemParameter("NEARESTPHARMACIESDISTANCE");
+            if(systemParameter==null){
+                response.setResponse("success");
+                response.setPharmacyDtos(pharmacyMapper.convertToDto(nearestPharmacies));
+
+                return response;
+            }
+        }catch (Exception e){
+            logFile.error(e);
+            e.printStackTrace();
+        }
         try{
             List<Pharmacy> pharmacies= (List<Pharmacy>) pharmacyRepository.findAll();
-
-            List<Pharmacy> nearestPharmacies=new ArrayList<>();
             try{
                 for(Pharmacy pharmacy:pharmacies){
                     double latitude=0.0;
@@ -212,9 +230,10 @@ public class PharmacyService implements IPharmacyService {
                             locationDto.getLongitude(),
                             Double.parseDouble(pharmacy.getLatitude()),
                             Double.parseDouble(pharmacy.getLongitude()),
-                            "K")<2)
+                            "K")<Double.parseDouble(systemParameter.getValue())/*2*/)
                     {
                         nearestPharmacies.add(pharmacy);
+                    }else{
                     }
                 }
             }catch (Exception e){

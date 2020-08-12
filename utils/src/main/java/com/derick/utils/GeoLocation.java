@@ -1,13 +1,19 @@
 package com.derick.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GeoLocation {
 
+    @Autowired
+    LogFile logFile;
+
     public double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+        logFile.events("Location Distance: "+lat1+", "+lon1+","+lat2+","+lon2+", Unit: "+unit);
         //System.out.println(distance(32.9697, -96.80322, 29.46786, -98.53506, "K") + " Kilometers\n");
         if ((lat1 == lat2) && (lon1 == lon2)) {
+            logFile.events("Location distance: zero");
             return 0;
         }
         else {
@@ -20,6 +26,11 @@ public class GeoLocation {
                 dist = dist * 1.609344;
             } else if (unit.equals("N")) {
                 dist = dist * 0.8684;
+            }
+            try{
+                logFile.events("Location distance: "+dist);
+            }catch(Exception e){
+                e.printStackTrace();
             }
             return (dist);
         }
