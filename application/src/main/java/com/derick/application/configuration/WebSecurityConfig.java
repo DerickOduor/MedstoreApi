@@ -71,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/api/quotation/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
                 antMatchers("/api/order/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
                 antMatchers("/api/mobiletoken/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+                antMatchers("/api/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
                 antMatchers("/api/sendpushnotification/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
         antMatchers("/api/medicine/update/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
         antMatchers("/api/medicine/add/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
@@ -80,6 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         antMatchers("/api/deliverytype/type/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
         antMatchers("/api/order/approve/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
         antMatchers("/api/pharmacy/delete/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
+        antMatchers("/api/order/orderslip/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
         antMatchers("/api/pharmacy/updatemobiletoken/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_PHARMACY')").
         antMatchers("/api/county/add/**").access("hasRole('ROLE_ADMIN')").
         antMatchers("/api/county/delete/**").access("hasRole('ROLE_ADMIN')").

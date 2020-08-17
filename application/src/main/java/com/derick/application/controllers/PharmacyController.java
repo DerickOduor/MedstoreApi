@@ -65,6 +65,19 @@ public class PharmacyController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping(value = "/api/pharmacy/updatemage")
+    public ResponseEntity<PharmacyResponse> updatemage(@RequestBody PharmacyDto pharmacyDto){
+        PharmacyResponse response=new PharmacyResponse();
+        response.setResponse("failed");
+        try{
+            response=pharmacyService.updatePharmacyImage(pharmacyDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
+        }
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping(value = "/api/pharmacy/delete/{id}")
     public  ResponseEntity<PharmacyResponse> deletePharmacy(@PathVariable int id){
         PharmacyResponse response=new PharmacyResponse();
@@ -117,7 +130,7 @@ public class PharmacyController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/api/pharmacy/{name}")
+    @GetMapping(value = "/api/pharmacy/name/{name}")
     public  ResponseEntity<PharmacyResponse> searchPharmacy(@PathVariable String name){
         PharmacyResponse response=new PharmacyResponse();
         response.setResponse("failed");

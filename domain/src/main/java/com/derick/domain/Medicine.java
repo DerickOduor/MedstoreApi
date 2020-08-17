@@ -59,7 +59,6 @@ public class Medicine implements Serializable {
     @NotNull
     private boolean Available;
 
-    @Column(nullable = false)
     @Lob
     private byte[] MedicineImage;
 

@@ -17,6 +17,7 @@ public interface IUserService {
     public User getUserByEmail(String email) throws NotFoundException;
     public UserSignUpResponse saveUser(UserSignUpDto user) throws Exception;
     public UserSigninResponse updateMobileToken(UserDto user) throws Exception;
+    public UserSigninResponse updateUser(UserDto user) throws Exception;
     public UserSignUpResponse resetPassword(UserSignUpDto user) throws Exception;
     public UserConfirmOtpResponse confirmOtp(UserConfirmOtpDto user) throws Exception;
     public UserConfirmOtpResponse sendOtp(UserConfirmOtpDto user) throws Exception;

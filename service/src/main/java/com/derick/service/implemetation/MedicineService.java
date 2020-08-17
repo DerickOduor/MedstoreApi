@@ -1,6 +1,7 @@
 package com.derick.service.implemetation;
 
 import com.derick.domain.Medicine;
+import com.derick.domain.Pharmacy;
 import com.derick.domain.User;
 import com.derick.dto.medstore.AddMedicineDto;
 import com.derick.dto.medstore.AddMedicineResponse;
@@ -11,6 +12,7 @@ import com.derick.mapper.medstore.ViewMedicineMapper;
 import com.derick.repository.IMedicineRepository;
 import com.derick.service.IMedicineService;
 import com.derick.utils.LogFile;
+import com.google.gson.Gson;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -82,10 +85,11 @@ public class MedicineService implements IMedicineService {
         ViewMedicineResponse viewMedicineResponse=new ViewMedicineResponse();
         viewMedicineResponse.setResponse("failed");
         try{
+            Pharmacy pharmacy=entityManager.find(Pharmacy.class,PharmacyId);
             CriteriaBuilder builder=entityManager.getCriteriaBuilder();
             CriteriaQuery<Medicine> query=builder.createQuery(Medicine.class);
             Root<Medicine> root=query.from(Medicine.class);
-            query.select(root).where(builder.equal(root.get("pharmacy.id"),PharmacyId));
+            query.select(root).where(builder.equal(root.get("pharmacy"),pharmacy));
             Query q=entityManager.createQuery(query);
 
             List<Medicine> medicine= new ArrayList<>();
@@ -129,6 +133,14 @@ public class MedicineService implements IMedicineService {
     public ViewMedicineResponse addMedicine(AddMedicineDto medicineDto) throws NotFoundException {
         ViewMedicineResponse addMedicineResponse=new ViewMedicineResponse();
         try{
+            //Gson gson=new Gson();
+            //logFile.events("Medicine: \n"+gson.toJson(medicineDto));
+        }catch(Exception e){
+            e.printStackTrace();
+            logFile.error(e);
+        }
+        try{
+            Pharmacy pharmacy=entityManager.find(Pharmacy.class,medicineDto.getPharmacy().getId());
             CriteriaBuilder builder=entityManager.getCriteriaBuilder();
             CriteriaQuery<Medicine> query=builder.createQuery(Medicine.class);
             Root<Medicine> root=query.from(Medicine.class);
@@ -146,8 +158,10 @@ public class MedicineService implements IMedicineService {
                     logFile.error(e);
                     e.printStackTrace();
                 }
-
-                medicineRepository.save(medicine1);
+                medicine1.setDateAdded(new Date());
+                medicine1.setPharmacy(pharmacy);
+                entityManager.persist(medicine1);
+//                medicineRepository.save(medicine1);
 
                 addMedicineResponse.setMedicine(viewMedicineMapper.convertToDto(medicine1));
                 addMedicineResponse.setResponse("success");
@@ -171,7 +185,8 @@ public class MedicineService implements IMedicineService {
         Medicine medicine=null;
         AddMedicineResponse medicineResponse=new AddMedicineResponse();
         try{
-            medicine=viewMedicineMapper.convertToEntity(getMedicine(medicineDto.getId()).getMedicine());
+            medicine=entityManager.find(Medicine.class,medicineDto.getId());
+            //medicine=viewMedicineMapper.convertToEntity(getMedicine(medicineDto.getId()).getMedicine());
 
         }catch (Exception e){
             e.printStackTrace();
@@ -183,7 +198,15 @@ public class MedicineService implements IMedicineService {
                 medicine.setName(medicineDto.getName());
                 medicine.setPrice(medicineDto.getPrice());
                 medicine.setMedicineImage(medicineDto.getMedicineImage());
-
+                medicine.setDescription(medicineDto.getDescription());
+                medicine.setDiscount(medicineDto.getDiscount());
+                medicine.setDosage(medicineDto.getDosage());
+                try{
+                    medicine.setPriceAfterDiscount(((100.0-medicine.getDiscount())*medicine.getPrice())/100);
+                }catch (Exception e){
+                    logFile.error(e);
+                    e.printStackTrace();
+                }
                 entityManager.persist(medicine);
                 medicineResponse.setResponse("success");
                 medicineResponse.setMedicineDto(viewMedicineMapper.convertToDto(medicine));

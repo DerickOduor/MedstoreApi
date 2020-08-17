@@ -14,6 +14,33 @@ public class ViewMedicineDto {
     private boolean Available;
     private byte[] MedicineImage;
     private PharmacyDto pharmacy;
+    private String Description;
+    private String Dosage;
+    private double Discount;
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+    public String getDosage() {
+        return Dosage;
+    }
+
+    public void setDosage(String dosage) {
+        Dosage = dosage;
+    }
+
+    public double getDiscount() {
+        return Discount;
+    }
+
+    public void setDiscount(double discount) {
+        Discount = discount;
+    }
 
     public PharmacyDto getPharmacy() {
         return pharmacy;

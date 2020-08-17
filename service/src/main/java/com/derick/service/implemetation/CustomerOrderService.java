@@ -83,6 +83,75 @@ public class CustomerOrderService implements ICustomerOrderService {
 
     @Override
     @Transactional
+    public CustomerOrderResponse getPharmacyOrderSlips(int PharmacyId) {
+        CustomerOrderResponse response=new CustomerOrderResponse();
+        response.setResponse("failed");
+        Pharmacy pharmacy;
+        try{
+            pharmacy=entityManager.find(Pharmacy.class,PharmacyId);
+            CriteriaBuilder builder=entityManager.getCriteriaBuilder();
+            CriteriaQuery<OrderSlip> query=builder.createQuery(OrderSlip.class);
+            Root<OrderSlip> root=query.from(OrderSlip.class);
+            query.select(root).where(builder.equal(root.get("pharmacy"),pharmacy));
+            Query q=entityManager.createQuery(query);
+
+            List<OrderSlip> orderSlips=new ArrayList<>();
+            orderSlips=q.getResultList();
+
+            response.setOrderSlipDtos(orderSlipMapper.convertToDto(orderSlips));
+            response.setResponse("success");
+
+            return response;
+        }catch(Exception e){
+            logFile.error(e);
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    @Override
+    @Transactional
+    public CustomerOrderResponse getPharmacyOrderSlip(int OrderSlipId) {
+        CustomerOrderResponse response=new CustomerOrderResponse();
+        response.setResponse("failed");
+        try{
+            OrderSlip orderSlip=entityManager.find(OrderSlip.class,OrderSlipId);
+
+            response.setOrderSlipDto(orderSlipMapper.convertToDto(orderSlip));
+            response.setResponse("success");
+
+            return response;
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
+        }
+        return response;
+    }
+
+    @Override
+    @Transactional
+    public CustomerOrderResponse approvePharmacyOrderSlip(OrderSlipDto orderSlipDto) {
+        CustomerOrderResponse response=new CustomerOrderResponse();
+        response.setResponse("failed");
+        try{
+            OrderSlip orderSlip=entityManager.find(OrderSlip.class,orderSlipDto.getId());
+            orderSlip.setApproved(orderSlipDto.isApproved());
+
+            entityManager.persist(orderSlip);
+
+            response.setOrderSlipDto(orderSlipMapper.convertToDto(orderSlip));
+            response.setResponse("success");
+
+            return response;
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
+        }
+        return response;
+    }
+
+    @Override
+    @Transactional
     public CustomerOrderResponse getCustomerOrderById(int OrderId)
     {
         CustomerOrderResponse response=new CustomerOrderResponse();

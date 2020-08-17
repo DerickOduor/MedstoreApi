@@ -182,6 +182,26 @@ public class PharmacyService implements IPharmacyService {
 
     @Override
     @Transactional
+    public PharmacyResponse updatePharmacyImage(PharmacyDto pharmacyDto) {
+        PharmacyResponse response=new PharmacyResponse();
+        response.setResponse("failed");
+        try{
+            Pharmacy pharmacy=entityManager.find(Pharmacy.class,pharmacyDto.getId());
+            pharmacy.setImage(pharmacyDto.getImage());
+            pharmacyRepository.save(pharmacy);
+
+            response.setPharmacyDto(pharmacyMapper.convertToDto(pharmacy));
+            response.setResponse("success");
+            return response;
+        }catch (Exception e){
+            logFile.error(e);
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    @Override
+    @Transactional
     public PharmacyResponse deletePharmacy(int PharmacyId)
     {
         PharmacyResponse response=new PharmacyResponse();

@@ -199,6 +199,54 @@ public class CustomerOrderController {
         return ResponseEntity.ok(orderResponse);
     }
 
+    @GetMapping("/api/order/orderslip/{id}")
+    public ResponseEntity<CustomerOrderResponse> getPharmacyOrderSlips(@PathVariable int id,
+                                                                  HttpServletRequest request,
+                                                                  HttpServletResponse response)
+    {
+        CustomerOrderResponse orderResponse=new CustomerOrderResponse();
+        orderResponse.setResponse("failed");
+        try{
+            orderResponse=orderService.getPharmacyOrderSlips(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
+        }
+        return ResponseEntity.ok(orderResponse);
+    }
+
+    @PutMapping("/api/order/orderslip/approve")
+    public ResponseEntity<CustomerOrderResponse> approveOrderSlip(@RequestBody OrderSlipDto orderSlipDto,
+                                                                  HttpServletRequest request,
+                                                                  HttpServletResponse response)
+    {
+        CustomerOrderResponse orderResponse=new CustomerOrderResponse();
+        orderResponse.setResponse("failed");
+        try{
+            orderResponse=orderService.approvePharmacyOrderSlip(orderSlipDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
+        }
+        return ResponseEntity.ok(orderResponse);
+    }
+
+    @GetMapping("/api/order/orderslip/get/{id}")
+    public ResponseEntity<CustomerOrderResponse> getPharmacyOrderSlip(@PathVariable int id,
+                                                                  HttpServletRequest request,
+                                                                  HttpServletResponse response)
+    {
+        CustomerOrderResponse orderResponse=new CustomerOrderResponse();
+        orderResponse.setResponse("failed");
+        try{
+            orderResponse=orderService.getPharmacyOrderSlip(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            logFile.error(e);
+        }
+        return ResponseEntity.ok(orderResponse);
+    }
+
     @DeleteMapping("/api/order/{id}")
     public ResponseEntity<CustomerOrderResponse> deleteCustomerOrder(@PathVariable int id,
                                                                   HttpServletRequest request,

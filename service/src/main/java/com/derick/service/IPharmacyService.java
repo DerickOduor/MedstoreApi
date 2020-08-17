@@ -12,6 +12,7 @@ public interface IPharmacyService {
     public PharmacyResponse savePharmacy(PharmacyDto pharmacyDto);
     public PharmacyResponse updatePharmacy(PharmacyDto pharmacyDto);
     public PharmacyResponse updatePharmacyMobuileToken(PharmacyDto pharmacyDto);
+    public PharmacyResponse updatePharmacyImage(PharmacyDto pharmacyDto);
     public PharmacyResponse deletePharmacy(int PharmacyId);
     public PharmacyResponse getPharmaciesByLocation(LocationDto locationDto);
 }

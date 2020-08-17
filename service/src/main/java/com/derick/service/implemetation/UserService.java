@@ -296,6 +296,28 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
+    public UserSigninResponse updateUser(UserDto user) throws Exception {
+        UserSigninResponse response=new UserSigninResponse();
+        response.setResponse("failed");
+        try {
+            User user1=entityManager.find(User.class,user.getId());
+            user1.setFirstname(user.getFirstname());
+            user1.setLastname(user.getLastname());
+
+            entityManager.persist(user1);
+
+            response.setUserDto(userMapper.convertToDto(user1));
+            response.setResponse("success");
+
+            return response;
+        }catch (Exception e){
+            logFile.error(e);
+        }
+        return response;
+    }
+
+    @Override
+    @Transactional
     public UserSignUpResponse resetPassword(UserSignUpDto userResetPassword) throws Exception {
         User user=userSignUpMapMapper.convertToEntity(userResetPassword);
         User userInDatabase=null;

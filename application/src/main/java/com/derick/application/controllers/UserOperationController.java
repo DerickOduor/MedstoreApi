@@ -126,4 +126,15 @@ public class UserOperationController {
        return ResponseEntity.ok("failed");
     }
 
+    @PutMapping("/api/user")
+    public ResponseEntity<?> updateUser(@RequestBody UserDto user){
+       try{
+           return ResponseEntity.ok(userService.updateUser(user));
+       }catch (Exception e){
+           logFile.error(e);
+            e.printStackTrace();
+       }
+       return ResponseEntity.ok("failed");
+    }
+
 }
